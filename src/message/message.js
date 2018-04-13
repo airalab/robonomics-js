@@ -1,10 +1,16 @@
 import has from 'lodash/has'
+import Promise from 'bluebird'
 import Bid from './bid'
 import Ask from './ask'
+import web3Beta from '../utils/web3Beta'
+
+const signerPrivateKey = (privateKey, hash) => {
+  return Promise.resolve(web3Beta.account.sign(hash, privateKey));
+}
 
 export default class Message {
-  constructor(signer = null) {
-    this.signer = signer
+  constructor(signer) {
+    this.signer = signer || signerPrivateKey
   }
 
   create(data) {

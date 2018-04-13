@@ -27,7 +27,9 @@ ES6 import
 ```javascript
 import Aira, { Provider } from 'aira-js'
 
-const aira = new Aira(web3, new Provider(ipfs))
+const aira = new Aira({
+  provider: new Provider(ipfs)
+})
 const chanel = aira.chanel('aira_market')
 
 chanel.asks(msg => {
@@ -43,7 +45,7 @@ chanel.bids(msg => {
 
 ### Доступно
 
-* подписка на получение спроса и предложений канала
+* прослушка канала сообщений спроса и предложения
 * отправка сообщения о спросе или предложения в канал
 * подписка на событие о появлении нового обязательства
 

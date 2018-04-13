@@ -4,9 +4,17 @@ import Message from './message'
 
 export default class Chanel {
   constructor(name, provider) {
+    if (provider === null) {
+      throw new Error('Message provider required');
+    }
     this.provider = provider
     this.name = name
     this.message = new Message()
+    this.watchers = {
+      ask: [],
+      bid: []
+    }
+    this.watch()
   }
 
   push(data) {
@@ -16,25 +24,26 @@ export default class Chanel {
     return this.provider.push(this.name, msg)
   }
 
-  watch(cb) {
+  watch() {
     this.provider.watch(this.name, (msg) => {
-      cb(this.message.create(decodeMsg(msg)))
+      const data = this.message.create(decodeMsg(msg))
+      if (has(data, 'objective')) {
+        this.watchers.ask.forEach((cb) => {
+          cb(data)
+        })
+      } else {
+        this.watchers.bid.forEach((cb) => {
+          cb(data)
+        })
+      }
     })
   }
 
   asks(cb) {
-    this.watch((msg) => {
-      if (has(msg, 'objective')) {
-        cb(msg);
-      }
-    })
+    this.watchers.ask.push(cb);
   }
 
   bids(cb) {
-    this.watch((msg) => {
-      if (!has(msg, 'objective')) {
-        cb(msg);
-      }
-    })
+    this.watchers.bid.push(cb);
   }
 }

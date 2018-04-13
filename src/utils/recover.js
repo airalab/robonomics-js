@@ -9,7 +9,8 @@ export const getSalt = () => {
 }
 
 export const hexToStr = (hex) => {
-  return base58.encode(web3Beta.utils.hexToBytes(hex)).toString('utf8')
+  const bytes = web3Beta.utils.hexToBytes(hex)
+  return base58.encode([18, 32, ...bytes]).toString('utf8')
 }
 
 export const encodeMsg = (data) => {
@@ -25,21 +26,24 @@ export const decodeMsg = (msg) => {
 
 const hashAsk = msg => (
   web3Beta.utils.soliditySha3(
-    { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.model)) },
-    { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.objective)) },
-    { type: 'uint256', value: msg.cost },
-    { type: 'uint256', value: msg.count },
-    { type: 'uint256', value: msg.fee },
-    { type: 'bytes32', value: msg.salt }
+    { type: 'bytes32', value: web3Beta.utils.bytesToHex(base58.decode(msg.model).slice(2)) },
+    { type: 'bytes32', value: web3Beta.utils.bytesToHex(base58.decode(msg.objective).slice(2)) },
+    { type: 'address', value: msg.token },
+    { type: 'address', value: msg.validator },
+    { type: 'uint256', value: (msg.cost * msg.count) },
+    { type: 'uint256', value: msg.validatorFee },
+    { type: 'bytes32', value: msg.salt },
+    { type: 'uint256', value: msg.deadline }
   )
 )
 const hashBid = msg => (
   web3Beta.utils.soliditySha3(
-    { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.model)) },
-    { type: 'uint256', value: msg.cost },
-    { type: 'uint256', value: msg.count },
-    { type: 'uint256', value: msg.fee },
-    { type: 'bytes32', value: msg.salt }
+    { type: 'bytes32', value: web3Beta.utils.bytesToHex(base58.decode(msg.model).slice(2)) },
+    { type: 'address', value: msg.token },
+    { type: 'uint256', value: (msg.cost * msg.count) },
+    { type: 'uint256', value: msg.lighthouseFee },
+    { type: 'bytes32', value: msg.salt },
+    { type: 'uint256', value: msg.deadline }
   )
 )
 

@@ -25,7 +25,8 @@
     "nodemon": "^1.17.2"
   },
   "dependencies": {
-    "aira-js": "file:../..",
-    "ipfs": "^0.28.2"
+    "aira-js": "^0.2.0",
+    "ipfs": "^0.28.2",
+    "web3": "0.20.6"
   }
 }
