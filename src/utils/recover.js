@@ -14,13 +14,25 @@ export const hexToStr = (hex) => {
 }
 
 export const encodeMsg = (data) => {
+  data.signature = data.signature.replace('0x', '')
+  if (has(data, 'salt')) {
+    data.salt = data.salt.replace('0x', '')
+  }
+  if (has(data, 'result')) {
+    data.result = data.result.replace('0x', '')
+  }
   return Buffer.from(base64.encode(JSON.stringify(data)) + "\r\n")
 }
 
 export const decodeMsg = (msg) => {
   const data = JSON.parse(base64.decode(Buffer.from(msg).toString('utf8')))
-  data.salt = '0x' + data.salt
   data.signature = '0x' + data.signature
+  if (has(data, 'salt')) {
+    data.salt = '0x' + data.salt
+  }
+  if (has(data, 'result')) {
+    data.result = '0x' + data.result
+  }
   return data
 }
 
@@ -46,11 +58,19 @@ const hashBid = msg => (
     { type: 'uint256', value: msg.deadline }
   )
 )
+const hashRes = msg => (
+  web3Beta.utils.soliditySha3(
+    { type: 'address', value: msg.liability },
+    { type: 'bytes32', value: msg.result }
+  )
+)
 
 export const hashMsg = (msg) => {
   let hash
   if (has(msg, 'objective')) {
     hash = hashAsk(msg)
+  } else if (has(msg, 'liability')) {
+    hash = hashRes(msg)
   } else {
     hash = hashBid(msg)
   }

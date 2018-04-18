@@ -3,7 +3,6 @@ import XRT from './contract/xrt'
 import Factory from './contract/factory'
 import Chanel from './chanel'
 import Message from './message'
-import * as utils from './utils/recover'
 
 export default class Aira {
   constructor(options) {
@@ -14,7 +13,6 @@ export default class Aira {
     }
     this.web3 = web3
     this.provider = provider
-    this.utils = utils
     this.address = {
       xrt: '0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2',
       factory: '0x673b9e3b800123E95B1582c97964812389E8040C'

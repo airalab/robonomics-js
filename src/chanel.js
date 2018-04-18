@@ -8,27 +8,35 @@ export default class Chanel {
       throw new Error('Message provider required');
     }
     this.provider = provider
-    this.name = name
+    this.market_chan = name + '_market'
+    this.result_chan = name + '_result'
     this.message = new Message()
     this.watchers = {
       ask: [],
-      bid: []
+      bid: [],
+      result: []
     }
-    this.watch()
+    this.status = {
+      market: false,
+      result: false
+    }
   }
 
   push(data) {
-    data.signature = data.signature.replace('0x', '')
-    data.salt = data.salt.replace('0x', '')
     const msg = encodeMsg(data)
-    return this.provider.push(this.name, msg)
+    const chan = (!has(data, 'liability')) ? this.market_chan : this.result_chan
+    return this.provider.push(chan, msg)
   }
 
-  watch() {
-    this.provider.watch(this.name, (msg) => {
+  watch(chan) {
+    this.provider.watch(chan, (msg) => {
       const data = this.message.create(decodeMsg(msg))
       if (has(data, 'objective')) {
         this.watchers.ask.forEach((cb) => {
+          cb(data)
+        })
+      } else if (has(data, 'liability')) {
+        this.watchers.result.forEach((cb) => {
           cb(data)
         })
       } else {
@@ -40,10 +48,26 @@ export default class Chanel {
   }
 
   asks(cb) {
-    this.watchers.ask.push(cb);
+    this.watchers.ask.push(cb)
+    if (this.status.market === false) {
+      this.watch(this.market_chan)
+      this.status.market = true
+    }
   }
 
   bids(cb) {
-    this.watchers.bid.push(cb);
+    this.watchers.bid.push(cb)
+    if (this.status.market === false) {
+      this.watch(this.market_chan)
+      this.status.market = true
+    }
+  }
+
+  result(cb) {
+    this.watchers.result.push(cb)
+    if (this.status.result === false) {
+      this.watch(this.result_chan)
+      this.status.result = true
+    }
   }
 }

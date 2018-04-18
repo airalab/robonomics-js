@@ -1,6 +1,6 @@
 import { getSalt, recover } from '../utils/recover'
 
-export default class Bid {
+export default class Base {
   constructor({ model, token, cost, count, deadline, salt, signature }) {
     this.model = model
     this.token = token

@@ -1,7 +1,8 @@
 import has from 'lodash/has'
 import Promise from 'bluebird'
-import Bid from './bid'
 import Ask from './ask'
+import Bid from './bid'
+import Result from './result'
 import web3Beta from '../utils/web3Beta'
 
 const signerPrivateKey = (privateKey, hash) => {
@@ -16,6 +17,9 @@ export default class Message {
   create(data) {
     if (has(data, 'objective')) {
       return new Ask(data)
+    }
+    if (has(data, 'liability')) {
+      return new Result(data)
     }
     return new Bid(data)
   }

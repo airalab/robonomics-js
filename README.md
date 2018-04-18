@@ -30,7 +30,7 @@ import Aira, { Provider } from 'aira-js'
 const aira = new Aira({
   provider: new Provider(ipfs)
 })
-const chanel = aira.chanel('aira_market')
+const chanel = aira.chanel('aira')
 
 chanel.asks(msg => {
   const account = msg.recover()

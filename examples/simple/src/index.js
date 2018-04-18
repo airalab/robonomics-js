@@ -18,7 +18,7 @@ const aira = new Aira({
 const app = () => {
   aira.factory.getLighthouses()
     .then((r) => {
-      const chanel = aira.chanel(r[0] + '_market')
+      const chanel = aira.chanel(r[0])
 
       console.log('chanel', chanel.name);
 
