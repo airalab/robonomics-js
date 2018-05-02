@@ -1,5 +1,5 @@
 {
-  "name": "aira-js-simple",
+  "name": "robonomics-js-simple",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -25,8 +25,8 @@
     "nodemon": "^1.17.2"
   },
   "dependencies": {
-    "aira-js": "^0.2.0",
     "ipfs": "^0.28.2",
+    "robonomics-js": "^0.1.0",
     "web3": "0.20.6"
   }
 }

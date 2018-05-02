@@ -1,4 +1,4 @@
-Aira-js
+Robonomics-js
 ========
 
 Простая Javascript библиотека для работы с данными сети Robonomics
@@ -6,11 +6,11 @@ Aira-js
 ## Установка
 
 ```
-npm install aira-js --save
+npm install robonomics-js --save
 ```
 или
 ```
-yarn add aira-js
+yarn add robonomics-js
 ```
 
 ### Зависимости
@@ -25,12 +25,12 @@ yarn add aira-js
 ES6 import
 
 ```javascript
-import Aira, { Provider } from 'aira-js'
+import Robonomics, { Provider } from 'robonomics-js'
 
-const aira = new Aira({
+const robonomics = new Robonomics({
   provider: new Provider(ipfs)
 })
-const chanel = aira.chanel('aira')
+const chanel = robonomics.chanel('robonomics')
 
 chanel.asks(msg => {
   const account = msg.recover()

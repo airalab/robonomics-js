@@ -4,7 +4,7 @@ import Factory from './contract/factory'
 import Chanel from './chanel'
 import Message from './message'
 
-export default class Aira {
+export default class Robonomics {
   constructor(options) {
     const { web3, provider } = {
       web3: null,
@@ -14,8 +14,8 @@ export default class Aira {
     this.web3 = web3
     this.provider = provider
     this.address = {
-      xrt: '0x2B3cE4c151f7c9662fdD12e5b9C7B39b0D61e7F2',
-      factory: '0x673b9e3b800123E95B1582c97964812389E8040C'
+      xrt: '0x0Ef7fCB816fd725819e071eFB48F7EACb85c1A6A',
+      factory: '0x291cF74beAFe4A3b61F36373dbC0fEbd35C8102e'
     }
     if (web3 !== null) {
       this.xrt = new XRT(web3, this.address.xrt)

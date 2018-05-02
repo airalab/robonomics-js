@@ -1,18 +1,18 @@
 {
-  "name": "aira-js",
-  "version": "0.3.0",
+  "name": "robonomics-js",
+  "version": "0.1.0",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vol4tim/aira-js.git"
+    "url": "git+https://github.com/airalab/robonomics-js.git"
   },
   "scripts": {
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "webpack --mode development --output-library Aira --output-library-target umd --output-filename aira.js",
-    "build:umd:min": "webpack --mode production --output-library Aira --output-library-target umd --output-filename aira.min.js",
+    "build:umd": "webpack --mode development --output-library Aira --output-library-target umd --output-filename robonomics.js",
+    "build:umd:min": "webpack --mode production --output-library Aira --output-library-target umd --output-filename robonomics.min.js",
     "build": "npm run build:commonjs && npm run build:es",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"

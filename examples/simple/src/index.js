@@ -1,24 +1,24 @@
 import Web3 from 'web3'
 import IPFS from 'ipfs'
-import Aira, { Provider } from 'aira-js'
+import Robonomics, { Provider } from 'robonomics-js'
 
 const privateKey = '123321321'
 const config = {
-  repo: 'ipfs-repo/aira-js/simple',
+  repo: 'ipfs-repo/robonomics-js/simple',
   EXPERIMENTAL: {
     pubsub: true,
   }
 }
 
-const aira = new Aira({
+const robonomics = new Robonomics({
   web3: new Web3(new Web3.providers.HttpProvider('http://localhost:8545')),
   provider: new Provider(new IPFS(config))
 })
 
 const app = () => {
-  aira.factory.getLighthouses()
+  robonomics.factory.getLighthouses()
     .then((r) => {
-      const chanel = aira.chanel(r[0])
+      const chanel = robonomics.chanel(r[0])
 
       console.log('chanel', chanel.name);
 
@@ -34,11 +34,11 @@ const app = () => {
         console.log('acc', acc);
       })
 
-      const message = aira.message();
+      const message = robonomics.message();
       const ask = message.create({
         model: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjdW',
         objective: 'Qmbdan31EbgETmJU79shwQDHcMgNoRS6RMGDNJZNp8FLCS',
-        token: aira.address.xrt,
+        token: robonomics.address.xrt,
         cost: 1,
         count: 1,
         validator: '0x0000000000000000000000000000000000000000',
@@ -50,4 +50,4 @@ const app = () => {
     })
 }
 
-aira.ready().then(() => app())
+robonomics.ready().then(() => app())
