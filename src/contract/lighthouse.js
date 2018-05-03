@@ -24,4 +24,23 @@ export default class Lighthouse extends Contract {
       });
     })
   }
+
+  getInfo() {
+    return Promise.join(
+      this.call('minimalFreeze'),
+      this.call('timeoutBlocks'),
+      this.call('keepaliveBlock'),
+      this.call('marker'),
+      this.call('quota'),
+      (...info) => (
+        {
+          minimalFreeze: Number(info[0]),
+          timeoutBlocks: Number(info[1]),
+          keepaliveBlock: Number(info[2]),
+          marker: Number(info[3]),
+          quota: Number(info[4]),
+        }
+      )
+    )
+  }
 }

@@ -20,7 +20,7 @@ export default class Liability extends Contract {
       this.call('validatorFee'),
       this.call('finalized'),
       this.call('result'),
-      // this.call('cost'),
+      this.call('cost'),
       (...info) => (
         {
           model: hexToStr(info[0]),
@@ -33,7 +33,7 @@ export default class Liability extends Contract {
           validatorFee: Number(info[7]),
           finalized: info[8],
           result: info[9],
-          // cost: Number(info[6]),
+          cost: Number(info[10]),
         }
       )
     )
