@@ -1,6 +1,6 @@
 {
   "name": "robonomics-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "license": "MIT",
@@ -11,9 +11,9 @@
   "scripts": {
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "webpack --mode development --output-library Aira --output-library-target umd --output-filename robonomics.js",
-    "build:umd:min": "webpack --mode production --output-library Aira --output-library-target umd --output-filename robonomics.min.js",
-    "build": "npm run build:commonjs && npm run build:es",
+    "build:umd": "webpack",
+    "build:umd:min": "webpack --config webpack.prod.js",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
