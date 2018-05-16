@@ -1,4 +1,4 @@
-import recover from './recover'
+import * as recover from './recover'
 import web3Beta from './web3Beta'
 
 export default {
