@@ -32,7 +32,7 @@ export default class Liability extends Contract {
           validator: info[6],
           validatorFee: Number(info[7]),
           finalized: info[8],
-          result: info[9],
+          result: (info[9] === '0x0000000000000000000000000000000000000000000000000000000000000000') ? '' : hexToStr(info[9]),
           cost: Number(info[10]),
         }
       )
