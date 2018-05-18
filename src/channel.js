@@ -2,7 +2,7 @@ import has from 'lodash/has'
 import { encodeMsg, decodeMsg } from './utils/recover'
 import Message from './message'
 
-export default class Chanel {
+export default class Channel {
   constructor(name, provider) {
     if (provider === null) {
       throw new Error('Message provider required');
@@ -23,8 +23,9 @@ export default class Chanel {
   }
 
   push(data) {
-    const msg = encodeMsg(data)
-    const chan = (!has(data, 'liability')) ? this.market_chan : this.result_chan
+    const props = data.getProps()
+    const msg = encodeMsg(props)
+    const chan = (!has(props, 'liability')) ? this.market_chan : this.result_chan
     return this.provider.push(chan, msg)
   }
 

@@ -15,21 +15,15 @@ export default class Message {
   }
 
   create(data) {
+    let msg;
     if (has(data, 'objective')) {
-      return new Ask(data)
+      msg = new Ask(data)
+    } else if (has(data, 'liability')) {
+      msg = new Result(data)
+    } else {
+      msg = new Bid(data)
     }
-    if (has(data, 'liability')) {
-      return new Result(data)
-    }
-    return new Bid(data)
-  }
-
-  sign(account, msg) {
-    return (this.signer === null) ? new Error('Not signer') :
-      this.signer(account, msg.hash())
-        .then((result) => {
-          msg.signature = result
-          return msg
-        })
+    msg.signer = this.signer
+    return msg
   }
 }

@@ -1,8 +1,8 @@
 import Web3 from 'web3'
 import IPFS from 'ipfs'
-import Robonomics, { Provider } from 'robonomics-js'
+import Robonomics, { Provider } from '../../../src'
 
-const privateKey = '123321321'
+const privateKey = '0x1b5040..............'
 const config = {
   repo: 'ipfs-repo/robonomics-js/simple',
   EXPERIMENTAL: {
@@ -18,17 +18,17 @@ const robonomics = new Robonomics({
 const app = () => {
   robonomics.factory.getLighthouses()
     .then((r) => {
-      const chanel = robonomics.chanel(r[0])
+      const channel = robonomics.channel(r[0])
 
-      console.log('chanel', chanel.name);
+      console.log('channel', channel.market_chan);
 
-      chanel.asks(msg => {
+      channel.asks(msg => {
         console.log('new ask', msg)
         const acc = msg.recover()
         console.log('acc', acc);
       })
 
-      chanel.bids(msg => {
+      channel.bids(msg => {
         console.log('new bid', msg)
         const acc = msg.recover()
         console.log('acc', acc);
@@ -45,8 +45,8 @@ const app = () => {
         validatorFee: 0,
         deadline: 45646546,
       });
-      message.sign(privateKey, ask)
-        .then(() => chanel.push(ask));
+      ask.sign(privateKey)
+        .then(() => channel.push(ask));
     })
 }
 

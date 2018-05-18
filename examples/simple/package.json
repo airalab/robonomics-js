@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "ipfs": "^0.28.2",
-    "robonomics-js": "^0.1.0",
     "web3": "0.20.6"
   }
 }

@@ -34,14 +34,14 @@ import Robonomics, { Provider } from 'robonomics-js'
 const robonomics = new Robonomics({
   provider: new Provider(ipfs)
 })
-const chanel = robonomics.chanel('robonomics')
+const channel = robonomics.channel('robonomics')
 
-chanel.asks(msg => {
+channel.asks(msg => {
   const account = msg.recover()
   console.log(msg, account)
 })
 
-chanel.bids(msg => {
+channel.bids(msg => {
   const account = msg.recover()
   console.log(msg, account)
 })

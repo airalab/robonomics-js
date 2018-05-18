@@ -1,6 +1,6 @@
 export { default } from './robonomics'
 export { default as Provider } from './provider'
-export { default as Chanel } from './chanel'
+export { default as Channel } from './channel'
 export { default as Factory } from './contract/factory'
 export { default as Liability } from './contract/liability'
 export { default as Lighthouse } from './contract/lighthouse'

@@ -13,9 +13,9 @@ export default class Provider {
     })
   }
 
-  push(chanel, msg) {
+  push(channel, msg) {
     return new Promise((resolve, reject) => {
-      this.ipfs.pubsub.publish(chanel, msg, (err) => {
+      this.ipfs.pubsub.publish(channel, msg, (err) => {
         if (err) {
           reject(err)
         }
@@ -24,8 +24,8 @@ export default class Provider {
     })
   }
 
-  watch(chanel, cb) {
-    this.ipfs.pubsub.subscribe(chanel, (msg) => {
+  watch(channel, cb) {
+    this.ipfs.pubsub.subscribe(channel, (msg) => {
       cb(msg.data)
     })
   }

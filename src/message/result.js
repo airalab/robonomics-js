@@ -1,16 +1,9 @@
-import { hashMsg } from '../utils/recover'
+import Base from './base'
 
-export default class Result {
-  constructor({ liability, result, signature }) {
-    this.liability = liability
-    this.result = result
-    this.signature = signature || null
-  }
-
-  hash() {
-    return hashMsg({
-      liability: this.liability,
-      result: this.result
-    })
+export default class Result extends Base {
+  constructor(data) {
+    super();
+    this.props = ['liability', 'result']
+    this.initProps(data)
   }
 }

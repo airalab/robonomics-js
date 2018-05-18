@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import XRT from './contract/xrt'
 import Factory from './contract/factory'
-import Chanel from './chanel'
+import Channel from './channel'
 import Message from './message'
 
 export default class Robonomics {
@@ -32,8 +32,8 @@ export default class Robonomics {
     return this.provider.ready()
   }
 
-  chanel(name) {
-    return new Chanel(name, this.provider)
+  channel(name) {
+    return new Channel(name, this.provider)
   }
 
   message(signer = null) {
