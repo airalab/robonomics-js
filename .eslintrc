@@ -21,5 +21,8 @@
   "env": {
     "node": true,
     "es6": true
+  },
+  "global": {
+    "window": true
   }
 }

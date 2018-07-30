@@ -2,8 +2,9 @@ import Contract from './contract'
 import ABI from '../abi/Lighthouse.json'
 
 export default class Lighthouse extends Contract {
-  constructor(web3, address) {
+  constructor(web3, address, name = '') {
     super(web3, ABI, address);
+    this.name = name;
   }
 
   getMembers() {

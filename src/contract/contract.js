@@ -6,7 +6,7 @@ export default class Contract {
       throw new Error('To use contrasts required web3');
     }
     this.web3 = web3;
-    this.address = address;
+    this.address = web3.toChecksumAddress(address);
     this.contract = web3.eth.contract(abi).at(address);
   }
 

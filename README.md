@@ -29,21 +29,20 @@ yarn add robonomics-js
 ES6 import
 
 ```javascript
-import Robonomics, { Provider } from 'robonomics-js'
+import Robonomics, { MessageProviderIpfsApi } from 'robonomics-js'
+import IPFS from 'ipfs-api'
 
 const robonomics = new Robonomics({
-  provider: new Provider(ipfs)
-})
-const channel = robonomics.channel('robonomics')
-
-channel.asks(msg => {
-  const account = msg.recover()
-  console.log(msg, account)
+  provider: new MessageProviderIpfsApi(new IPFS('localhost', 5001))
 })
 
-channel.bids(msg => {
-  const account = msg.recover()
-  console.log(msg, account)
+robonomics.ready().then(() => {
+  robonomics.getAsk('lights-out-factory.model.0.robonomics.eth', (msg) => {
+    console.log('ask', msg)
+  })
+  robonomics.getBid('lights-out-factory.model.0.robonomics.eth', (msg) => {
+    console.log('bid', msg)
+  })
 })
 ```
 
@@ -52,5 +51,3 @@ channel.bids(msg => {
 * прослушка канала сообщений спроса и предложения
 * отправка сообщения о спросе или предложения в канал
 * подписка на событие о появлении нового обязательства
-
-[Подробнее в примерах](/examples)

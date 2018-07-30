@@ -3,72 +3,67 @@ import { encodeMsg, decodeMsg } from './utils/recover'
 import Message from './message'
 
 export default class Channel {
-  constructor(name, provider) {
+  constructor(lighthouse, provider) {
     if (provider === null) {
       throw new Error('Message provider required');
     }
     this.provider = provider
-    this.market_chan = name + '_market'
-    this.result_chan = name + '_result'
+    this.lighthouse = lighthouse
     this.message = new Message()
     this.watchers = {
       ask: [],
       bid: [],
       result: []
     }
-    this.status = {
-      market: false,
-      result: false
-    }
+    this.status = false
   }
 
   push(data) {
     const props = data.getProps()
     const msg = encodeMsg(props)
-    const chan = (!has(props, 'liability')) ? this.market_chan : this.result_chan
-    return this.provider.push(chan, msg)
+    return this.provider.push(this.lighthouse, msg)
   }
 
-  watch(chan) {
-    this.provider.watch(chan, (msg) => {
-      const data = this.message.create(decodeMsg(msg))
-      if (has(data, 'objective')) {
-        this.watchers.ask.forEach((cb) => {
-          cb(data)
-        })
+  watch() {
+    this.provider.watch(this.lighthouse, (msg) => {
+      const data = decodeMsg(msg)
+      let type = ''
+      if (has(data, 'validator')) {
+        type = 'ask'
       } else if (has(data, 'liability')) {
-        this.watchers.result.forEach((cb) => {
-          cb(data)
-        })
+        type = 'result'
       } else {
-        this.watchers.bid.forEach((cb) => {
-          cb(data)
-        })
+        type = 'bid'
       }
+      const message = this.message.create(type, data)
+      message.account = message.recover()
+      this.watchers[type].forEach((cb) => {
+        cb(message)
+      })
     })
   }
 
   asks(cb) {
     this.watchers.ask.push(cb)
-    if (this.status.market === false) {
-      this.watch(this.market_chan)
-      this.status.market = true
+    if (this.status === false) {
+      this.watch()
+      this.status = true
     }
   }
 
   bids(cb) {
     this.watchers.bid.push(cb)
-    if (this.status.market === false) {
-      this.watch(this.market_chan)
-      this.status.market = true
+    if (this.status === false) {
+      this.watch()
+      this.status = true
     }
   }
 
   result(cb) {
     this.watchers.result.push(cb)
-    if (this.status.result === false) {
-      this.watch(this.result_chan)
-      this.status.result = true
+    if (this.status === false) {
+      this.watch()
+      this.status = true
     }
   }
 }

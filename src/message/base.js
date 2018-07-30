@@ -1,27 +1,28 @@
-import { getSalt, recover, hashMsg } from '../utils/recover'
+import Promise from 'bluebird'
+import { getNonce, recover, hashMsg } from '../utils/recover'
 
 export default class Base {
   constructor() {
-    this.props = ['model', 'token', 'cost', 'count', 'deadline', 'salt', 'signature']
+    this._props = ['model', 'objective', 'token', 'cost', 'deadline', 'nonce', 'signature']
   }
 
   initProps(data) {
     this.setProps({
       ...data,
-      salt: data.salt || getSalt(),
+      nonce: data.nonce || getNonce(),
       signature: data.signature || null
     })
   }
 
   setProps(data) {
-    this.props.forEach((name) => {
+    this._props.forEach((name) => {
       this[name] = data[name]
     })
   }
 
   getProps() {
     const data = {}
-    this.props.forEach((name) => {
+    this._props.forEach((name) => {
       data[name] = this[name]
     })
     return data
@@ -36,11 +37,11 @@ export default class Base {
   }
 
   signer() {
-    return new Error('Not signer')
+    return Promise.reject('Not signer')
   }
 
-  sign(account) {
-    return this.signer(account, this.hash())
+  sign() {
+    return this.signer(this.hash())
       .then((result) => {
         this.signature = result
         return true

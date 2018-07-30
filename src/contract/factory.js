@@ -10,21 +10,23 @@ export default class Factory extends Contract {
   }
 
   watchLiability(cb) {
-    const event = this.contract.BuildedLiability({}, '')
+    const event = this.contract.NewLiability()
     event.watch((error, result) => {
       if (!error) {
-        const liability = new Liability(this.web3, result.args.robotLiability)
-        cb(liability, result);
+        this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
+          const liability = new Liability(this.web3, result.args.liability, r.to, r.from)
+          cb(liability);
+        });
       }
     });
     return event
   }
 
   watchLighthouse(cb) {
-    const event = this.contract.BuildedLighthouse({}, '')
+    const event = this.contract.NewLighthouse()
     event.watch((error, result) => {
       if (!error) {
-        const lighthouse = new Lighthouse(this.web3, result.args.lighthouse)
+        const lighthouse = new Lighthouse(this.web3, result.args.lighthouse, result.args.name)
         cb(lighthouse, result);
       }
     });
@@ -33,24 +35,5 @@ export default class Factory extends Contract {
 
   stop(event) {
     return event.stopWatching()
-  }
-
-  getLighthouses() {
-    const lighthouses = [];
-    const getLighthouses = (i, cb) => {
-      this.contract.buildedLighthouse(i, (e, r) => {
-        if (r !== '0x') {
-          lighthouses.push(this.web3.toChecksumAddress(r));
-          getLighthouses(i + 1, cb);
-        } else {
-          cb();
-        }
-      });
-    };
-    return new Promise((resolve) => {
-      getLighthouses(0, () => {
-        resolve(lighthouses)
-      });
-    })
   }
 }

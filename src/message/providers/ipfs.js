@@ -1,14 +1,16 @@
 import Promise from 'bluebird'
+import Abstract from './abstract'
 
-export default class Provider {
+export default class Ipfs extends Abstract {
   constructor(ipfs) {
+    super()
     this.ipfs = ipfs
   }
 
   ready() {
     return new Promise((resolve) => {
       this.ipfs.once('ready', () => {
-        resolve()
+        resolve(true)
       })
     })
   }
@@ -19,7 +21,7 @@ export default class Provider {
         if (err) {
           reject(err)
         }
-        resolve()
+        resolve(true)
       })
     })
   }

@@ -1,29 +1,27 @@
 import has from 'lodash/has'
-import Promise from 'bluebird'
 import Ask from './ask'
 import Bid from './bid'
 import Result from './result'
-import web3Beta from '../utils/web3Beta'
-
-const signerPrivateKey = (privateKey, hash) => {
-  return Promise.resolve(web3Beta.account.sign(hash, privateKey));
-}
 
 export default class Message {
   constructor(signer) {
-    this.signer = signer || signerPrivateKey
+    this.signer = signer
   }
 
-  create(data) {
+  create(type, data) {
     let msg;
-    if (has(data, 'objective')) {
+    if (type === 'ask') {
       msg = new Ask(data)
-    } else if (has(data, 'liability')) {
+    } else if (type === 'bid') {
+      msg = new Bid(data)
+    } else if (type === 'result') {
       msg = new Result(data)
     } else {
-      msg = new Bid(data)
+      throw new Error('Required type message')
     }
-    msg.signer = this.signer
+    if (this.signer) {
+      msg.signer = this.signer
+    }
     return msg
   }
 }
