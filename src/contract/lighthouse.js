@@ -11,7 +11,7 @@ export default class Lighthouse extends Contract {
     const members = [];
     const getMembers = (i, cb) => {
       this.contract.members(i, (e, r) => {
-        if (r !== '0x') {
+        if (r && r !== '0x') {
           members.push(this.web3.toChecksumAddress(r));
           getMembers(i + 1, cb);
         } else {
