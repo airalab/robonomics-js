@@ -1,6 +1,6 @@
 {
   "name": "robonomics-js",
-  "version": "0.2.3",
+  "version": "0.2.5",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "license": "MIT",

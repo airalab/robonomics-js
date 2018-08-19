@@ -22,13 +22,22 @@ export default class Robonomics {
     } else {
       throw new Error('Required web3')
     }
+
+    this.isPrivateKey = false
+    this.privateKey = null
     if (options.account) {
       this.account = options.account
     } else if (this.web3.eth.coinbase) {
       this.account = this.web3.eth.coinbase
+    } else if (options.privateKey) {
+      this.isPrivateKey = true
+      this.privateKey = this.account
+      this.account = signers.getAddressPrivateKey(this.privateKey)
     } else {
       throw new Error('Required account')
     }
+    this.account = this.web3.toChecksumAddress(this.account)
+
     if (options.provider) {
       this.provider = options.provider
       this.init.push(this.provider.ready())
@@ -36,22 +45,20 @@ export default class Robonomics {
       throw new Error('Required provider')
     }
 
-    this.isPrivateKey = false
-    this.privateKey = null
     const signPrefix = (options.signPrefix === false) ? false : true
-    if (this.account.length === 42) {
-      this.message = new Message(signers.account(this.web3, this.account, signPrefix))
-    } else if (this.account.length === 66) {
-      this.isPrivateKey = true
-      this.privateKey = this.account
-      this.message = new Message(signers.privateKey(this.privateKey, signPrefix))
-      this.account = signers.getAddressPrivateKey(this.privateKey)
+    if (options.signer) {
+      this.signer = options.signer()
+    } else if (this.isPrivateKey === false) {
+      this.signer = signers.account(this.web3, this.account, signPrefix)
     } else {
-      throw new Error('Required account')
+      this.signer = signers.privateKey(this.privateKey, signPrefix)
     }
-    this.account = this.web3.toChecksumAddress(this.account)
+    this.message = new Message(this.signer)
 
     this.version = 0
+    if (options.version) {
+      this.version = options.version
+    }
     let ens = '0x314159265dD8dbb310642f98f50C066173C1259b'
     if (options.ens) {
       ens = options.ens

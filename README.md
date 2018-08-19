@@ -17,12 +17,14 @@ yarn add robonomics-js
 <script src="https://cdn.jsdelivr.net/npm/robonomics-js/dist/robonomics.min.js"></script>
 ```
 
+## Документация
+
+- [https://aira.gitbook.io/robonomics/](https://aira.gitbook.io/robonomics/)
+
 ### Зависимости
 
 * [Web3](https://github.com/ethereum/web3.js/)
 * [Ipfs](https://github.com/ipfs/js-ipfs)
-
-
 
 ### Использование
 
