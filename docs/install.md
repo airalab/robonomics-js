@@ -8,7 +8,7 @@ npm install robonomics-js --save
 ```
 yarn add robonomics-js
 ```
-в браузере
+CDN
 ```
 <script src="https://cdn.jsdelivr.net/npm/robonomics-js/dist/robonomics.min.js"></script>
 ```

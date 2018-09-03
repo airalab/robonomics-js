@@ -27,12 +27,12 @@ export default class Robonomics {
     this.privateKey = null
     if (options.account) {
       this.account = options.account
-    } else if (this.web3.eth.coinbase) {
-      this.account = this.web3.eth.coinbase
     } else if (options.privateKey) {
       this.isPrivateKey = true
-      this.privateKey = this.account
+      this.privateKey = options.privateKey
       this.account = signers.getAddressPrivateKey(this.privateKey)
+    } else if (this.web3.eth.coinbase) {
+      this.account = this.web3.eth.coinbase
     } else {
       throw new Error('Required account')
     }
@@ -55,7 +55,7 @@ export default class Robonomics {
     }
     this.message = new Message(this.signer)
 
-    this.version = 0
+    this.version = 1
     if (options.version) {
       this.version = options.version
     }

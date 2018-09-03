@@ -5,5 +5,6 @@ Robonomics-js
 
 ## Ссылки
 
+- [Сайт](https://robonomics.network/)
 - [Документация](https://airalab.github.io/robonomics-js/)
 - [Минимальный шаблон dApp](https://github.com/airalab/vue-dapp-robonomics-template)
