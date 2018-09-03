@@ -56,7 +56,7 @@ export default class Robonomics {
     this.message = new Message(this.signer)
 
     this.version = 1
-    if (options.version) {
+    if (options.hasOwnProperty('version')) {
       this.version = options.version
     }
     let ens = '0x314159265dD8dbb310642f98f50C066173C1259b'
