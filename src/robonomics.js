@@ -7,6 +7,11 @@ import Channel from './channel'
 import Message from './message'
 import * as signers from './message/signer'
 
+let instance = null
+export const getInstance = () => {
+  return instance
+}
+
 export default class Robonomics {
   constructor(options) {
     this.channel = null
@@ -79,6 +84,7 @@ export default class Robonomics {
             })
         })
     )
+    instance = this
   }
 
   ready() {

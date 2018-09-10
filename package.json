@@ -1,6 +1,6 @@
 {
   "name": "robonomics-js",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "license": "MIT",
@@ -40,10 +40,12 @@
   "dependencies": {
     "base-58": "^0.0.1",
     "base-64": "^0.1.0",
+    "better-queue": "^3.8.10",
     "bluebird": "^3.5.1",
     "eth-ens-namehash": "^2.0.8",
     "eth-lib": "^0.2.8",
     "lodash": "^4.17.5",
+    "web3-eth-abi": "^1.0.0-beta.36",
     "web3-utils": "^1.0.0-beta.33"
   }
 }
