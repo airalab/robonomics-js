@@ -1,5 +1,6 @@
 import Promise from 'bluebird'
-import { getNonce, recover, hashMsg } from '../utils/recover'
+import _has from 'lodash/has'
+import { getNonce, recovery, hashMsg } from '../utils/recovery'
 
 export default class Base {
   constructor() {
@@ -16,6 +17,9 @@ export default class Base {
 
   setProps(data) {
     this._props.forEach((name) => {
+      if (!_has(data, name)) {
+        throw new Error("Not found init property " + name)
+      }
       this[name] = data[name]
     })
   }
@@ -32,8 +36,8 @@ export default class Base {
     return hashMsg(this.getProps())
   }
 
-  recover() {
-    return recover(this)
+  recovery() {
+    return recovery(this)
   }
 
   signer() {
@@ -44,7 +48,7 @@ export default class Base {
     return this.signer(this.hash())
       .then((result) => {
         this.signature = result
-        return true
+        return result
       })
   }
 }

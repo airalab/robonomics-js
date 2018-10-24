@@ -1,4 +1,4 @@
-export { default } from './robonomics'
+export { default, getInstance } from './robonomics'
 export { default as MessageProviderIpfs } from './message/providers/ipfs'
 export { default as MessageProviderIpfsApi } from './message/providers/ipfsApi'
 export { default as MessageProviderAbstract } from './message/providers/abstract'

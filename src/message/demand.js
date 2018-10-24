@@ -1,6 +1,6 @@
 import Base from './base'
 
-export default class Ask extends Base {
+export default class Demand extends Base {
   constructor(data) {
     super();
     this._props = [...this._props, 'validator', 'validatorFee']

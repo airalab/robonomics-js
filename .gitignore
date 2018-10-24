@@ -4,5 +4,6 @@ npm-debug.log*
 /es
 /lib
 /dist
+/coverage
 !/dist/.gitkeep
 ipfs-repo

@@ -6,8 +6,8 @@
 
 * Guide
 
-  * [Спрос](ask.md)
-  * [Предложение](bid.md)
+  * [Спрос](demand.md)
+  * [Предложение](offer.md)
   * [Результат](result.md)
   * [Создание маяка](lighthouse.md)
   * [Провайдер маяка](provider.md)

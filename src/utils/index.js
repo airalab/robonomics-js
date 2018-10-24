@@ -1,7 +1,7 @@
-import * as recover from './recover'
+import * as recovery from './recovery'
 import web3Beta from './web3Beta'
 
 export default {
-  recover,
+  recovery,
   web3Beta
 }

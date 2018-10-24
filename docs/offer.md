@@ -5,7 +5,7 @@
 
 ```javascript
 const model = 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg'
-robonomics.getBid(model, (msg) => {
+robonomics.getOffer(model, (msg) => {
 	console.log(msg)
 })
 ```

@@ -1,7 +1,7 @@
 import Promise from 'bluebird'
 import Contract from './contract'
 import ABI from '../abi/RobotLiability.json'
-import { hexToStr, hashMsg } from '../utils/recover'
+import { hexToStr, hashMsg } from '../utils/recovery'
 
 export default class Liability extends Contract {
   constructor(web3, address, lighthouse = null, worker = null) {
@@ -16,21 +16,19 @@ export default class Liability extends Contract {
       this.call('objective'),
       this.call('result'),
 
-      this.call('xrt'),
       this.call('token'),
-
       this.call('cost'),
       this.call('lighthouseFee'),
       this.call('validatorFee'),
 
-      this.call('askHash'),
-      this.call('bidHash'),
+      this.call('demandHash'),
+      this.call('offerHash'),
 
       this.call('promisor'),
       this.call('promisee'),
       this.call('validator'),
 
-      this.call('isConfirmed'),
+      this.call('isSuccess'),
       this.call('isFinalized'),
       (...info) => (
         {
@@ -38,22 +36,20 @@ export default class Liability extends Contract {
           objective: hexToStr(info[1]),
           result: (info[2] === '0x') ? '' : hexToStr(info[2]),
 
-          xrt: info[3],
-          token: info[4],
+          token: info[3],
+          cost: Number(info[4]),
+          lighthouseFee: Number(info[5]),
+          validatorFee: Number(info[6]),
 
-          cost: Number(info[5]),
-          lighthouseFee: Number(info[6]),
-          validatorFee: Number(info[7]),
+          demandHash: info[7],
+          offerHash: info[8],
 
-          askHash: info[8],
-          bidHash: info[9],
+          promisor: this.web3.toChecksumAddress(info[9]),
+          promisee: this.web3.toChecksumAddress(info[10]),
+          validator: this.web3.toChecksumAddress(info[11]),
 
-          promisor: this.web3.toChecksumAddress(info[10]),
-          promisee: this.web3.toChecksumAddress(info[11]),
-          validator: this.web3.toChecksumAddress(info[12]),
-
-          isConfirmed: info[13],
-          isFinalized: info[14],
+          isSuccess: info[12],
+          isFinalized: info[13],
         }
       )
     )
@@ -64,8 +60,8 @@ export default class Liability extends Contract {
       .then((r) => hexToStr(r))
   }
 
-  equalAsk(msg) {
-    return this.call('askHash')
+  equalDemand(msg) {
+    return this.call('demandHash')
       .then((r) => {
         if (hashMsg(msg) === r) {
           return true
@@ -74,8 +70,8 @@ export default class Liability extends Contract {
       })
   }
 
-  equalBid(msg) {
-    return this.call('bidHash')
+  equalOffer(msg) {
+    return this.call('offerHash')
       .then((r) => {
         if (hashMsg(msg) === r) {
           return true

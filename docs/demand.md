@@ -5,10 +5,10 @@
 
 ```javascript
 const model = 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg'
-robonomics.getAsk(model, (msg) => {
+robonomics.getDemand(model, (msg) => {
 	console.log(msg)
 })
-const ask = {
+const demand = {
 	objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M',
 	token: robonomics.xrt.address,
 	cost: 1,
@@ -33,7 +33,7 @@ const ask = {
 Предварительно нужно одобрить необходимое кол-во токенов
 
 ```javascript
-robonomics.xrt.send('approve', [robonomics.factory.address, ask.cost], { from: robonomics.account })
+robonomics.xrt.send('approve', [robonomics.factory.address, demand.cost], { from: robonomics.account })
   .then((tx) => console.log(tx))
 ```
 
@@ -42,13 +42,13 @@ robonomics.xrt.send('approve', [robonomics.factory.address, ask.cost], { from: r
 ```javascript
 import { Token } from 'robonomics-js'
 const token = new Token(robonomics.web3, '0x1231321321321321321321321')
-token.send('approve', [robonomics.factory.address, ask.cost], { from: robonomics.account })
+token.send('approve', [robonomics.factory.address, demand.cost], { from: robonomics.account })
   .then((tx) => console.log(tx))
 ```
 Отправляем сообщение спроса
 
 ```javascript
-robonomics.postAsk(market, ask)
+robonomics.postDemand(market, demand)
 	.then((liability) => {
 		console.log('liability', liability.address)
 		liability.watchResult((result) => {

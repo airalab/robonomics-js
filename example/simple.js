@@ -11,19 +11,19 @@ robonomics.ready().then(() => {
 
   const market = 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg'
 
-  robonomics.getAsk(market, (msg) => {
-    console.log('ask', msg)
+  robonomics.getDemand(market, (msg) => {
+    console.log('demand', msg)
   })
 
-  robonomics.getBid(market, (msg) => {
-    console.log('bid', msg)
+  robonomics.getOffer(market, (msg) => {
+    console.log('offer', msg)
   })
 
   robonomics.getResult((msg) => {
     console.log('result', msg)
   })
 
-  const ask = {
+  const demand = {
     objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M',
     token: robonomics.xrt.address,
     cost: 1,
@@ -31,19 +31,20 @@ robonomics.ready().then(() => {
     validatorFee: 0,
     deadline: 9999999
   }
-  robonomics.postAsk(market, ask)
+  robonomics.postDemand(market, demand)
     .then((liability) => {
       console.log('liability', liability.address)
     })
 
-  const bid = {
+  const offer = {
     objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M',
     token: robonomics.xrt.address,
     cost: 1,
+    validator: '0x0000000000000000000000000000000000000000',
     lighthouseFee: 0,
     deadline: 9999999
   }
-  robonomics.postBid(market, bid)
+  robonomics.postOffer(market, offer)
     .then((liability) => {
       console.log('liability', liability.address)
     })
@@ -52,7 +53,7 @@ robonomics.ready().then(() => {
     console.log('liability', liability.address)
   })
 
-  robonomics.postResult({ liability: liability.address, result: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M' })
+  robonomics.postResult({ liability: liability.address, success: true, result: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M' })
 
   robonomics.ens.addr('airalab.lighthouse.0.robonomics.eth')
     .then((address) => {
@@ -64,12 +65,12 @@ robonomics.ready().then(() => {
       console.log('balance', balance)
     })
 
-  robonomics.xrt.send('approve', [robonomics.factory.address, 100000], { from: web3.eth.accounts[0] })
+  robonomics.xrt.send('approve', [robonomics.factory.address, 100000], { from: robonomics.account })
     .then((tx) => {
       console.log('tx', tx)
     })
 
-  robonomics.xrt.send('approve', [robonomics.factory.address, 100000], { from: web3.eth.accounts[0] })
+  robonomics.xrt.send('approve', [robonomics.factory.address, 100000], { from: robonomics.account })
     .then((tx) => {
       console.log('tx', tx)
     })

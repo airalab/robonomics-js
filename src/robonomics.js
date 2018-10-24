@@ -1,4 +1,5 @@
 import Promise from 'bluebird'
+import _has from 'lodash/has'
 import XRT from './contract/xrt'
 import Factory from './contract/factory'
 import Lighthouse from './contract/lighthouse'
@@ -50,7 +51,12 @@ export default class Robonomics {
       throw new Error('Required provider')
     }
 
-    const signPrefix = (options.signPrefix === false) ? false : true
+    let signPrefix = true
+    if (_has(options, 'signPrefix')) {
+      signPrefix = Boolean(options.signPrefix)
+    } else if (_has(this.web3.currentProvider, 'isMetaMask') && this.web3.currentProvider.isMetaMask) {
+      signPrefix = false
+    }
     if (options.signer) {
       this.signer = options.signer()
     } else if (this.isPrivateKey === false) {
@@ -60,8 +66,8 @@ export default class Robonomics {
     }
     this.message = new Message(this.signer)
 
-    this.version = 1
-    if (options.hasOwnProperty('version')) {
+    this.version = 2
+    if (_has(options, 'version')) {
       this.version = options.version
     }
     let ens = '0x314159265dD8dbb310642f98f50C066173C1259b'
@@ -133,18 +139,18 @@ export default class Robonomics {
       })
   }
 
-  getAsk(market, cb) {
+  getDemand(market, cb) {
     if (this.channel === null) {
       throw new Error('Required lighthouse')
     }
     if (market === null) {
-      this.channel.asks((msg) => {
+      this.channel.demands((msg) => {
         cb(msg)
       })
     } else {
       this.getModel(market)
         .then((model) => {
-          this.channel.asks((msg) => {
+          this.channel.demands((msg) => {
             if (msg.model === model) {
               cb(msg)
             }
@@ -153,18 +159,18 @@ export default class Robonomics {
     }
   }
 
-  getBid(market, cb) {
+  getOffer(market, cb) {
     if (this.channel === null) {
       throw new Error('Required lighthouse')
     }
     if (market === null) {
-      this.channel.bids((msg) => {
+      this.channel.offers((msg) => {
         cb(msg)
       })
     } else {
       this.getModel(market)
         .then((model) => {
-          this.channel.bids((msg) => {
+          this.channel.offers((msg) => {
             if (msg.model === model) {
               cb(msg)
             }
@@ -213,12 +219,12 @@ export default class Robonomics {
       .then(() => msg)
   }
 
-  postBid(market, data) {
-    return this.post('bid', market, data)
+  postOffer(market, data) {
+    return this.post('offer', market, data)
       .then((msg) => {
         return new Promise((resolve, reject) => {
           const watcher = this.watchLiability(null, (liability) => {
-            liability.equalBid({ ...msg, account: this.account })
+            liability.equalOffer({ ...msg, account: this.account })
               .then((r) => {
                 if (r) {
                   this.factory.stop(watcher)
@@ -233,12 +239,12 @@ export default class Robonomics {
       })
   }
 
-  postAsk(market, data) {
-    return this.post('ask', market, data)
+  postDemand(market, data) {
+    return this.post('demand', market, data)
       .then((msg) => {
         return new Promise((resolve, reject) => {
           const watcher = this.watchLiability(null, (liability) => {
-            liability.equalAsk({ ...msg, account: this.account })
+            liability.equalDemand({ ...msg, account: this.account })
               .then((r) => {
                 if (r) {
                   this.factory.stop(watcher)

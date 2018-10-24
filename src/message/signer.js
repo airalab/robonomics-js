@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 import web3Beta from '../utils/web3Beta'
-import { hashMsgPrefix } from '../utils/recover'
+import { hashMsgPrefix } from '../utils/recovery'
 
 export const privateKey = (privateKey, prefix = true) => {
   let setPrefix = hash => hash

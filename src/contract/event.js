@@ -1,10 +1,18 @@
-import abi from 'web3-eth-abi'
 import _find from 'lodash/find'
+import _isObject from 'lodash/isObject'
 import Queue from 'better-queue'
 import MemoryStore from 'better-queue-memory'
+import web3Beta from '../utils/web3Beta'
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
+}
+function encodeEventSignature(functionName) {
+  // abi.encodeEventSignature(eventAbi)
+  if (_isObject(functionName)) {
+      functionName = web3Beta.utils._jsonInterfaceMethodToString(functionName);
+  }
+  return web3Beta.utils.sha3(functionName);
 }
 
 export default class Event {
@@ -13,7 +21,7 @@ export default class Event {
     this.toContract = toContract.toLowerCase()
     this.eventAbi = _find(contract.abi, { name: nameEvent, type: 'event' })
     this.address = contract.address.toLowerCase()
-    this.topic = abi.encodeEventSignature(this.eventAbi)
+    this.topic = encodeEventSignature(this.eventAbi)
     this.id = 'e_' + getRandomInt(0, 10000)
     this.from = 0
     this.to = 0
@@ -92,7 +100,7 @@ export default class Event {
   parseTx(receipt) {
     receipt.logs.forEach((item) => {
       if (item.address.toLowerCase() === this.address && item.topics[0] === this.topic) {
-        item.args = abi.decodeLog(this.eventAbi.inputs, ((item.data === '0x' || item.data === '0X') ? '' : item.data), item.topics.slice(1))
+        item.args = web3Beta.abi.decodeLog(this.eventAbi.inputs, ((item.data === '0x' || item.data === '0X') ? '' : item.data), item.topics.slice(1))
         this.cb(item)
       }
     })

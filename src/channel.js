@@ -1,5 +1,5 @@
-import has from 'lodash/has'
-import { encodeMsg, decodeMsg } from './utils/recover'
+import _has from 'lodash/has'
+import { encodeMsg, decodeMsg } from './utils/recovery'
 import Message from './message'
 
 export default class Channel {
@@ -11,8 +11,8 @@ export default class Channel {
     this.lighthouse = lighthouse
     this.message = new Message()
     this.watchers = {
-      ask: [],
-      bid: [],
+      demand: [],
+      offer: [],
       result: []
     }
     this.status = false
@@ -28,31 +28,31 @@ export default class Channel {
     this.provider.watch(this.lighthouse, (msg) => {
       const data = decodeMsg(msg)
       let type = ''
-      if (has(data, 'validator')) {
-        type = 'ask'
-      } else if (has(data, 'liability')) {
+      if (_has(data, 'validatorFee')) {
+        type = 'demand'
+      } else if (_has(data, 'lighthouseFee')) {
+        type = 'offer'
+      } else if (_has(data, 'liability')) {
         type = 'result'
-      } else {
-        type = 'bid'
       }
       const message = this.message.create(type, data)
-      message.account = message.recover()
+      message.account = message.recovery()
       this.watchers[type].forEach((cb) => {
         cb(message)
       })
     })
   }
 
-  asks(cb) {
-    this.watchers.ask.push(cb)
+  demands(cb) {
+    this.watchers.demand.push(cb)
     if (this.status === false) {
       this.watch()
       this.status = true
     }
   }
 
-  bids(cb) {
-    this.watchers.bid.push(cb)
+  offers(cb) {
+    this.watchers.offer.push(cb)
     if (this.status === false) {
       this.watch()
       this.status = true

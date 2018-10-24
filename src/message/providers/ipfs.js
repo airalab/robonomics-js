@@ -22,13 +22,13 @@ export default class Ipfs extends Abstract {
           reject(err)
         }
         resolve(true)
-      })
+      }, { discover: true })
     })
   }
 
   watch(channel, cb) {
     this.ipfs.pubsub.subscribe(channel, (msg) => {
       cb(msg.data)
-    })
+    }, { discover: true })
   }
 }

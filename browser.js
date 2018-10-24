@@ -1,5 +1,6 @@
 import Robonomics, * as addons from './src'
 
+Robonomics.getInstance = addons.getInstance;
 Robonomics.MessageProviderIpfs = addons.MessageProviderIpfs;
 Robonomics.MessageProviderIpfsApi = addons.MessageProviderIpfsApi;
 Robonomics.MessageProviderAbstract = addons.MessageProviderAbstract;

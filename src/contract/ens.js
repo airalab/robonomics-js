@@ -21,7 +21,7 @@ export default class Ens extends Contract {
 
   getUrlZone(name, zone = null) {
     let url = name
-    if (zone && (new RegExp("\." + zone)).test(name) === false) {
+    if (zone && (new RegExp('.' + zone)).test(name) === false) {
       url += '.' + zone
     }
     return url
@@ -29,7 +29,7 @@ export default class Ens extends Contract {
 
   getUrl(name, zone = null) {
     let url = this.getUrlZone(name, zone)
-    if (/\.robonomics.\eth$/.test(name) === false) {
+    if (/\.robonomics\.eth$/.test(name) === false) {
       url += '.' + this.version + '.robonomics.eth'
     }
     return url

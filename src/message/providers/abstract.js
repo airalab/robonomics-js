@@ -9,11 +9,11 @@ export default class Abstract {
     throw new TypeError("Do not call abstract method foo from child.")
   }
 
-  push(channel, msg) {
+  push() {
     throw new TypeError("Do not call abstract method foo from child.")
   }
 
-  watch(channel, cb) {
+  watch() {
     throw new TypeError("Do not call abstract method foo from child.")
   }
 }

@@ -2,7 +2,7 @@ import Promise from 'bluebird'
 import Contract from './contract'
 import ABI from '../abi/TokenEmission.json'
 
-export default class XRT extends Contract {
+export default class Token extends Contract {
   constructor(web3, address) {
     super(web3, ABI, address);
   }
