@@ -1,4 +1,21 @@
 language: node_js
 node_js: '8'
+
 script:
   - npm test
+
+cache:
+  yarn: true
+  directories:
+    - "node_modules"
+
+before_deploy:
+  - npm run build
+
+deploy:
+  - provider: npm
+    email: "vol4tim@gmail.com"
+    api_key: $NPM_API_KEY
+    skip_cleanup: true
+    on:
+      tags: true
