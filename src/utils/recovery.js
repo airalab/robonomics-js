@@ -41,6 +41,7 @@ const hashDemand = msg => (
     { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.objective)) },
     { type: 'address', value: msg.token },
     { type: 'uint256', value: msg.cost },
+    { type: 'address', value: msg.lighthouse },
     { type: 'address', value: msg.validator },
     { type: 'uint256', value: msg.validatorFee },
     { type: 'uint256', value: msg.deadline },
@@ -54,6 +55,7 @@ const hashOffer = msg => (
     { type: 'address', value: msg.token },
     { type: 'uint256', value: msg.cost },
     { type: 'address', value: msg.validator },
+    { type: 'address', value: msg.lighthouse },
     { type: 'uint256', value: msg.lighthouseFee },
     { type: 'uint256', value: msg.deadline },
     { type: 'bytes32', value: msg.nonce }

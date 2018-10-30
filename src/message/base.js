@@ -4,7 +4,7 @@ import { getNonce, recovery, hashMsg } from '../utils/recovery'
 
 export default class Base {
   constructor() {
-    this._props = ['model', 'objective', 'token', 'cost', 'deadline', 'nonce', 'signature']
+    this._props = ['model', 'objective', 'token', 'cost', 'validator', 'lighthouse', 'deadline', 'nonce', 'signature']
   }
 
   initProps(data) {

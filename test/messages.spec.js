@@ -24,8 +24,8 @@ describe('Messages', () => {
     expect(() => message.create('test', msgs.demands.valid)).toThrow()
   })
   test('hash msg', () => {
-    expect(demand.hash()).toBe('0xa1762c4b18cd5098fe440280c9dd545e5e175a39a5f04030a91824db8f29ab0c')
-    expect(offer.hash()).toBe('0xb6d8dfbd0136a759f0402891023f7385c0a7de662c71d3ddeef740bc727f16d3')
+    expect(demand.hash()).toBe('0x370adaaa832a5c394a7836c8f489f725059a82ff1606ef84d94e23b69c271ecd')
+    expect(offer.hash()).toBe('0xb135cc6936de8370ad7577201d9e8dea4f1d1227afbf6ce87b90318775742ce9')
     expect(result.hash()).toBe('0x7c9a3ec9351ba568fb65ab03f91b0e81f7c35654a7a54a78f9fb296c01b32393')
   })
   test('recovery acc', () => {

@@ -66,7 +66,7 @@ export default class Robonomics {
     }
     this.message = new Message(this.signer)
 
-    this.version = 2
+    this.version = 3
     if (_has(options, 'version')) {
       this.version = options.version
     }
@@ -190,18 +190,21 @@ export default class Robonomics {
 
   watchLiability(market, cb) {
     return this.factory.watchLiability((liability) => {
-      if (liability.lighthouse === this.lighthouse.address) {
-        if (market) {
-          Promise.join(this.getModel(market), liability.model(),
-            (marketAddr, liabilityMarketAddr) => {
-              if (marketAddr === liabilityMarketAddr) {
-                cb(liability)
-              }
-            })
-        } else {
-          cb(liability)
-        }
-      }
+      liability.lighthouse()
+        .then((r) => {
+          if (r === this.lighthouse.address) {
+            if (market) {
+              Promise.join(this.getModel(market), liability.model(),
+                (marketAddr, liabilityMarketAddr) => {
+                  if (marketAddr === liabilityMarketAddr) {
+                    cb(liability)
+                  }
+                })
+            } else {
+              cb(liability)
+            }
+          }
+        })
     });
   }
 
@@ -212,7 +215,7 @@ export default class Robonomics {
     let msg
     return this.getModel(market)
       .then((model) => {
-        msg = this.message.create(type, { ...data, model });
+        msg = this.message.create(type, { lighthouse: this.lighthouse.address, model, ...data });
         return msg.sign()
       })
       .then(() => this.channel.push(msg))

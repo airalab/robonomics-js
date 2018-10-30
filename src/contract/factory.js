@@ -15,7 +15,7 @@ export default class Factory extends Contract {
     const event = new Event(this.web3, robonomics.lighthouse.address, this.contract, 'NewLiability')
     event.watch((result) => {
       this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
-        const liability = new Liability(this.web3, result.args.liability, r.to, r.from)
+        const liability = new Liability(this.web3, result.args.liability, r.from)
         cb(liability);
       });
     })

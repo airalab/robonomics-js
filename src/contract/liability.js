@@ -4,9 +4,8 @@ import ABI from '../abi/RobotLiability.json'
 import { hexToStr, hashMsg } from '../utils/recovery'
 
 export default class Liability extends Contract {
-  constructor(web3, address, lighthouse = null, worker = null) {
+  constructor(web3, address, worker = null) {
     super(web3, ABI, address);
-    this.lighthouse = this.web3.toChecksumAddress(lighthouse)
     this.worker = this.web3.toChecksumAddress(worker)
   }
 
@@ -26,6 +25,7 @@ export default class Liability extends Contract {
 
       this.call('promisor'),
       this.call('promisee'),
+      this.call('lighthouse'),
       this.call('validator'),
 
       this.call('isSuccess'),
@@ -46,13 +46,19 @@ export default class Liability extends Contract {
 
           promisor: this.web3.toChecksumAddress(info[9]),
           promisee: this.web3.toChecksumAddress(info[10]),
-          validator: this.web3.toChecksumAddress(info[11]),
+          lighthouse: this.web3.toChecksumAddress(info[11]),
+          validator: this.web3.toChecksumAddress(info[12]),
 
-          isSuccess: info[12],
-          isFinalized: info[13],
+          isSuccess: info[13],
+          isFinalized: info[14],
         }
       )
     )
+  }
+
+  lighthouse() {
+    return this.call('lighthouse')
+      .then((r) => this.web3.toChecksumAddress(r))
   }
 
   model() {
