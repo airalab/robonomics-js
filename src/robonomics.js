@@ -113,7 +113,7 @@ export default class Robonomics {
             lighthouses.push({
               name: this.ens.getUrl(item.args.name, 'lighthouse'),
               addr: item.args.lighthouse,
-            });
+            })
           })
           resolve(lighthouses)
         } else {
@@ -205,7 +205,7 @@ export default class Robonomics {
             }
           }
         })
-    });
+    })
   }
 
   post(type, market, data) {
@@ -215,7 +215,7 @@ export default class Robonomics {
     let msg
     return this.getModel(market)
       .then((model) => {
-        msg = this.message.create(type, { lighthouse: this.lighthouse.address, model, ...data });
+        msg = this.message.create(type, { lighthouse: this.lighthouse.address, model, ...data })
         return msg.sign()
       })
       .then(() => this.channel.push(msg))
@@ -266,7 +266,7 @@ export default class Robonomics {
     if (this.channel === null) {
       throw new Error('Required lighthouse')
     }
-    const msg = this.message.create('result', { ...data });
+    const msg = this.message.create('result', { ...data })
     return msg.sign()
       .then(() => this.channel.push(msg))
   }

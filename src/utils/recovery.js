@@ -73,7 +73,7 @@ export const hashMsgPrefix = (hash) => {
   return web3Beta.utils.soliditySha3(
     { type: 'bytes', value: web3Beta.utils.stringToHex('\x19Ethereum Signed Message:\n32') },
     { type: 'bytes', value: hash }
-  );
+  )
 }
 
 export const hashMsg = (msg) => {
@@ -90,5 +90,5 @@ export const hashMsg = (msg) => {
 
 export const recovery = (msg) => {
   const hash = hashMsgPrefix(hashMsg(msg))
-  return web3Beta.account.recover(hash, msg.signature);
+  return web3Beta.account.recover(hash, msg.signature)
 }

@@ -3,26 +3,26 @@ import ABI from '../abi/Lighthouse.json'
 
 export default class Lighthouse extends Contract {
   constructor(web3, address, name = '') {
-    super(web3, ABI, address);
-    this.name = name;
+    super(web3, ABI, address)
+    this.name = name
   }
 
   getMembers() {
-    const members = [];
+    const members = []
     const getMembers = (i, cb) => {
       this.contract.members(i, (e, r) => {
         if (r && r !== '0x') {
-          members.push(this.web3.toChecksumAddress(r));
-          getMembers(i + 1, cb);
+          members.push(this.web3.toChecksumAddress(r))
+          getMembers(i + 1, cb)
         } else {
-          cb();
+          cb()
         }
-      });
-    };
+      })
+    }
     return new Promise((resolve) => {
       getMembers(0, () => {
         resolve(members)
-      });
+      })
     })
   }
 

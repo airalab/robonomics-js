@@ -5,7 +5,7 @@ import ABI from '../abi/ENS.json'
 
 export default class Ens extends Contract {
   constructor(web3, address, version) {
-    super(web3, ABI, address);
+    super(web3, ABI, address)
     this.version = version
     this.resolver = null
   }

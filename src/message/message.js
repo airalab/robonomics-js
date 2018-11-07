@@ -8,7 +8,7 @@ export default class Message {
   }
 
   create(type, data) {
-    let msg;
+    let msg
     if (type === 'demand') {
       msg = new Demand(data)
     } else if (type === 'offer') {

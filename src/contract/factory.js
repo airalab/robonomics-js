@@ -7,7 +7,7 @@ import { getInstance } from '../robonomics'
 
 export default class Factory extends Contract {
   constructor(web3, address) {
-    super(web3, ABI, address);
+    super(web3, ABI, address)
   }
 
   watchLiability(cb) {
@@ -16,8 +16,8 @@ export default class Factory extends Contract {
     event.watch((result) => {
       this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
         const liability = new Liability(this.web3, result.args.liability, r.from)
-        cb(liability);
-      });
+        cb(liability)
+      })
     })
     return event
   }
@@ -26,7 +26,7 @@ export default class Factory extends Contract {
     const event = new Event(this.web3, this.contract.address, this.contract, 'NewLighthouse')
     event.watch((result) => {
       const lighthouse = new Lighthouse(this.web3, result.args.lighthouse, result.args.name)
-      cb(lighthouse, result);
+      cb(lighthouse, result)
     })
     return event
   }

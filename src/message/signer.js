@@ -7,7 +7,7 @@ export const privateKey = (privateKey, prefix = true) => {
   if (prefix) {
     setPrefix = hashMsgPrefix
   }
-  return (hash) => Promise.resolve(web3Beta.account.sign(setPrefix(hash), privateKey));
+  return (hash) => Promise.resolve(web3Beta.account.sign(setPrefix(hash), privateKey))
 }
 
 export const getAddressPrivateKey = (privateKey) => {
@@ -20,5 +20,5 @@ export const account = (web3, account, prefix = true) => {
   if (prefix) {
     setPrefix = hashMsgPrefix
   }
-  return (hash) => Promise.promisify(web3.eth.sign)(account, setPrefix(hash));
+  return (hash) => Promise.promisify(web3.eth.sign)(account, setPrefix(hash))
 }

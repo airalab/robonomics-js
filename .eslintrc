@@ -1,15 +1,9 @@
 {
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended"],
   "parser": "babel-eslint",
   "rules": {
-    "import/prefer-default-export": 0,
-    "import/no-named-as-default-member": 0,
-    "no-console": 0,
-    "semi": 0,
-    "comma-dangle": 0,
-    "prefer-template": 0,
-    "linebreak-style": 0,
-    "no-restricted-properties": 0
+    "semi": [1, "never"],
+    "no-console": 0
   },
   "parserOptions": {
     "ecmaVersion": 6,

@@ -5,7 +5,7 @@ import Message from './message'
 export default class Channel {
   constructor(lighthouse, provider) {
     if (provider === null) {
-      throw new Error('Message provider required');
+      throw new Error('Message provider required')
     }
     this.provider = provider
     this.lighthouse = lighthouse

@@ -4,7 +4,7 @@ import ABI from '../abi/TokenEmission.json'
 
 export default class Token extends Contract {
   constructor(web3, address) {
-    super(web3, ABI, address);
+    super(web3, ABI, address)
   }
 
   getInfo() {

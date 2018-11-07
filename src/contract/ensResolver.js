@@ -4,7 +4,7 @@ import ABI from '../abi/EnsResolver.json'
 
 export default class EnsResolver extends Contract {
   constructor(web3, address) {
-    super(web3, ABI, address);
+    super(web3, ABI, address)
   }
 
   addr(name) {

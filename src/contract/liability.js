@@ -5,7 +5,7 @@ import { hexToStr, hashMsg } from '../utils/recovery'
 
 export default class Liability extends Contract {
   constructor(web3, address, worker = null) {
-    super(web3, ABI, address);
+    super(web3, ABI, address)
     this.worker = this.web3.toChecksumAddress(worker)
   }
 
@@ -91,13 +91,13 @@ export default class Liability extends Contract {
       this.getInfo()
         .then((infoUp) => {
           if (infoUp.isFinalized) {
-            cb(infoUp.result);
+            cb(infoUp.result)
             // ipfsBagCat(infoUp.result, (bag) => {
-            //   cb(bag.data);
-            // });
-            clearInterval(watcher);
+            //   cb(bag.data)
+            // })
+            clearInterval(watcher)
           }
-        });
-    }, 5000);
+        })
+    }, 5000)
   }
 }

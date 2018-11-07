@@ -5,14 +5,14 @@ import MemoryStore from 'better-queue-memory'
 import web3Beta from '../utils/web3Beta'
 
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.floor(Math.random() * (max - min)) + min
 }
 function encodeEventSignature(functionName) {
   // abi.encodeEventSignature(eventAbi)
   if (_isObject(functionName)) {
-      functionName = web3Beta.utils._jsonInterfaceMethodToString(functionName);
+    functionName = web3Beta.utils._jsonInterfaceMethodToString(functionName)
   }
-  return web3Beta.utils.sha3(functionName);
+  return web3Beta.utils.sha3(functionName)
 }
 
 export default class Event {
@@ -58,7 +58,7 @@ export default class Event {
       return
     }
     this.web3.eth.getBlockNumber((e, to) => {
-      if (this.from == 0) {
+      if (this.from === 0) {
         this.from = to
       }
       if (this.from > to) {

@@ -2,7 +2,7 @@ import Base from './base'
 
 export default class Offer extends Base {
   constructor(data) {
-    super();
+    super()
     this._props = [...this._props, 'lighthouseFee']
     this.initProps({
       validator: '0x0000000000000000000000000000000000000000',
