@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 import Contract from './contract'
-import ABI from '../abi/RobotLiability.json'
+import ABI from '../abi/Liability.json'
 import { hexToStr, hashMsg } from '../utils/recovery'
 
 export default class Liability extends Contract {

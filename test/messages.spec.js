@@ -2,13 +2,10 @@ import Message, { Demand, Offer, Result } from '../src/message'
 import { privateKey } from '../src/message/signer'
 import { encodeMsg, decodeMsg } from '../src/utils/recovery'
 import * as msgs from './helper/msg'
+import config from './config.json'
 
 describe('Messages', () => {
-  const accountTest = {
-    address: '0x18bddEc5f4710591807F033E30F7400fc936D0ED',
-    privateKey: '0xae17d49cf94f4c577c343c8eae102c7f2f29c4a6f571e9ae2b50cd32553b13cb'
-  }
-  const message = new Message(privateKey(accountTest.privateKey, true))
+  const message = new Message(privateKey(config.account.privateKey, true))
   const demand = message.create('demand', msgs.demands.valid)
   const offer = message.create('offer', msgs.offers.valid)
   const result = message.create('result', msgs.results.valid)
@@ -29,9 +26,11 @@ describe('Messages', () => {
     expect(result.hash()).toBe('0x7c9a3ec9351ba568fb65ab03f91b0e81f7c35654a7a54a78f9fb296c01b32393')
   })
   test('recovery acc', () => {
-    expect(demand.recovery()).toBe(accountTest.address)
-    expect(offer.recovery()).toBe(accountTest.address)
-    expect(result.recovery()).toBe(accountTest.address)
+    // console.log(demand.recovery())
+    // console.log(config.account, config.account.address)
+    expect(demand.recovery()).toBe(config.account.address)
+    expect(offer.recovery()).toBe(config.account.address)
+    expect(result.recovery()).toBe(config.account.address)
   })
   test('sign', async () => {
     expect.assertions(3)

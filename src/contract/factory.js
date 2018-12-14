@@ -12,7 +12,7 @@ export default class Factory extends Contract {
 
   watchLiability(cb) {
     const robonomics = getInstance()
-    const event = new Event(this.web3, robonomics.lighthouse.address, this.contract, 'NewLiability')
+    const event = new Event(this.web3, robonomics.lighthouse.address, this.contract, 'NewLiability', robonomics.eventTimeout)
     event.watch((result) => {
       this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
         const liability = new Liability(this.web3, result.args.liability, r.from)
@@ -23,7 +23,8 @@ export default class Factory extends Contract {
   }
 
   watchLighthouse(cb) {
-    const event = new Event(this.web3, this.contract.address, this.contract, 'NewLighthouse')
+    const robonomics = getInstance()
+    const event = new Event(this.web3, this.contract.address, this.contract, 'NewLighthouse', robonomics.eventTimeout)
     event.watch((result) => {
       const lighthouse = new Lighthouse(this.web3, result.args.lighthouse, result.args.name)
       cb(lighthouse, result)

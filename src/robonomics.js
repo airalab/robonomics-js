@@ -66,7 +66,7 @@ export default class Robonomics {
     }
     this.message = new Message(this.signer)
 
-    this.version = 3
+    this.version = 4
     if (_has(options, 'version')) {
       this.version = options.version
     }
@@ -75,6 +75,11 @@ export default class Robonomics {
       ens = options.ens
     }
     this.ens = new ENS(this.web3, ens, this.version)
+
+    this.eventTimeout = 10000
+    if (options.eventTimeout) {
+      this.eventTimeout = options.eventTimeout
+    }
 
     this.init.push(
       this.ens.ready()

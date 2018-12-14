@@ -16,8 +16,9 @@ function encodeEventSignature(functionName) {
 }
 
 export default class Event {
-  constructor(web3, toContract, contract, nameEvent) {
+  constructor(web3, toContract, contract, nameEvent, timeout = 10000) {
     this.web3 = web3
+    this.timeout = timeout
     this.toContract = toContract.toLowerCase()
     this.eventAbi = _find(contract.abi, { name: nameEvent, type: 'event' })
     this.address = contract.address.toLowerCase()
@@ -80,7 +81,7 @@ export default class Event {
     setTimeout(() => {
       this.from = this.to + 1
       this.watch(cb)
-    }, 10000)
+    }, this.timeout)
   }
 
   stopWatching() {

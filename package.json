@@ -19,7 +19,7 @@
     "postversion": "git push --follow-tags",
     "test": "npm run lint && npm run test:jest",
     "test:jest": "jest",
-    "test:cov": "npm test -- --coverage"
+    "test:cov": "npm run test:jest -- --coverage"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

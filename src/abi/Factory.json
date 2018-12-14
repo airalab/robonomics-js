@@ -1,1 +1,374 @@
-[{"constant":true,"inputs":[],"name":"robotLiabilityLib","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"gasEpoch","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"xrt","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"ens","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"auction","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"gasUtilizing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"smmaPeriod","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"isLighthouse","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalGasUtilizing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"lighthouseLib","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"isHashConsumed","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"gasPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_robot_liability_lib","type":"address"},{"name":"_lighthouse_lib","type":"address"},{"name":"_auction","type":"address"},{"name":"_xrt","type":"address"},{"name":"_ens","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"liability","type":"address"}],"name":"NewLiability","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"lighthouse","type":"address"},{"indexed":false,"name":"name","type":"string"}],"name":"NewLighthouse","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"hash","type":"bytes32"}],"name":"HashConsumed","type":"event"},{"constant":true,"inputs":[{"name":"_gas","type":"uint256"}],"name":"wnFromGas","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_demand","type":"bytes"},{"name":"_offer","type":"bytes"}],"name":"createLiability","outputs":[{"name":"liability","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_minimalFreeze","type":"uint256"},{"name":"_timeoutBlocks","type":"uint256"},{"name":"_name","type":"string"}],"name":"createLighthouse","outputs":[{"name":"lighthouse","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_gas","type":"uint256"}],"name":"liabilityFinalized","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "gasEpoch",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x284fd42f"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "xrt",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x330f9588"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ens",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x3f15457f"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "liabilityCode",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x5afa47c2"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "lighthouseCode",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x773fb7fd"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "auction",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x7d9f6db5"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "gasConsumedOf",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x99d5bae1"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "isLighthouse",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xbbb6630f"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "totalGasConsumed",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xd8fe9250"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "isHashConsumed",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xfa3260de"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "gasPrice",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xfe173b97"
+  },
+  {
+    "inputs": [
+      {
+        "name": "_liability",
+        "type": "address"
+      },
+      {
+        "name": "_lighthouse",
+        "type": "address"
+      },
+      {
+        "name": "_auction",
+        "type": "address"
+      },
+      {
+        "name": "_ens",
+        "type": "address"
+      },
+      {
+        "name": "_xrt",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor",
+    "signature": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "hash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "HashConsumed",
+    "type": "event",
+    "signature": "0xff8bad61d8f2eaa50a98cc8d31de285608e5a904d330f193043d6c9854e2586d"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "liability",
+        "type": "address"
+      }
+    ],
+    "name": "NewLiability",
+    "type": "event",
+    "signature": "0xf0f0e2354315aae25080baa26761b4ef52d621c91208fb0edde9e3f3fade3219"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "lighthouse",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "NewLighthouse",
+    "type": "event",
+    "signature": "0xfea5f888ffd98cd2299e704fb235c2166cb5a9d9d8e9debcc08160626b8019a4"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_gas",
+        "type": "uint256"
+      }
+    ],
+    "name": "wnFromGas",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xd64d136d"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_minimalStake",
+        "type": "uint256"
+      },
+      {
+        "name": "_timeoutInBlocks",
+        "type": "uint256"
+      },
+      {
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "createLighthouse",
+    "outputs": [
+      {
+        "name": "lighthouse",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0x4d5b85f1"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_demand",
+        "type": "bytes"
+      },
+      {
+        "name": "_offer",
+        "type": "bytes"
+      }
+    ],
+    "name": "createLiability",
+    "outputs": [
+      {
+        "name": "liability",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xd2b962f2"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_liability",
+        "type": "address"
+      },
+      {
+        "name": "_gas",
+        "type": "uint256"
+      }
+    ],
+    "name": "liabilityCreated",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xfeb67918"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_liability",
+        "type": "address"
+      },
+      {
+        "name": "_gas",
+        "type": "uint256"
+      }
+    ],
+    "name": "liabilityFinalized",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xa51daf26"
+  }
+]

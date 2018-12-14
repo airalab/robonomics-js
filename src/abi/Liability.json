@@ -1,13 +1,8 @@
 [
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "stakes",
+    "inputs": [],
+    "name": "lighthouseFee",
     "outputs": [
       {
         "name": "",
@@ -17,7 +12,67 @@
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0x16934fc4"
+    "signature": "0x051064c6"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "model",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x0ad9d052"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isSuccess",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x0b6c754b"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "cost",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x13faede6"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "objective",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x14f1586a"
   },
   {
     "constant": true,
@@ -37,42 +92,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "marker",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function",
-    "signature": "0x3acddfc1"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "keepAliveBlock",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function",
-    "signature": "0x4ed75ded"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "providers",
+    "name": "validator",
     "outputs": [
       {
         "name": "",
@@ -82,12 +102,12 @@
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0x50f3fc81"
+    "signature": "0x3a5381b5"
   },
   {
     "constant": true,
     "inputs": [],
-    "name": "timeoutInBlocks",
+    "name": "validatorFee",
     "outputs": [
       {
         "name": "",
@@ -97,37 +117,97 @@
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0x678bd169"
+    "signature": "0x3f6d8256"
   },
   {
     "constant": true,
     "inputs": [],
-    "name": "minimalStake",
+    "name": "promisee",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0x9ec41a2d"
+    "signature": "0x474ce872"
   },
   {
     "constant": true,
     "inputs": [],
-    "name": "providersLength",
+    "name": "lighthouse",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0xad23fe73"
+    "signature": "0x6301fd63"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "result",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x65372147"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "offerHash",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x699373ca"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isFinalized",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0x8d4e4083"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "promisor",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function",
+    "signature": "0xc2d8de54"
   },
   {
     "constant": true,
@@ -147,101 +227,50 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "quota",
+    "name": "demandHash",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0xcebe09c9"
+    "signature": "0xf0476bc5"
   },
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "_provider",
-        "type": "address"
-      }
-    ],
-    "name": "quotaOf",
+    "inputs": [],
+    "name": "token",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "payable": false,
     "stateMutability": "view",
     "type": "function",
-    "signature": "0xef23b3a3"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "indexOf",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function",
-    "signature": "0xfd6aad25"
+    "signature": "0xfc0c546a"
   },
   {
     "anonymous": false,
     "inputs": [
       {
         "indexed": true,
-        "name": "provider",
-        "type": "address"
-      }
-    ],
-    "name": "Online",
-    "type": "event",
-    "signature": "0xb87e760cbc2db6791d417f8be7b6b859468d348a1e174f37374530d391b9cb57"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "provider",
-        "type": "address"
-      }
-    ],
-    "name": "Offline",
-    "type": "event",
-    "signature": "0x3bc83fff2907676f544f59cca17a4d818ad142c57b57bc028867db31ca8e5b35"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "name": "provider",
-        "type": "address"
+        "name": "success",
+        "type": "bool"
       },
       {
-        "indexed": true,
-        "name": "quota",
-        "type": "uint256"
+        "indexed": false,
+        "name": "result",
+        "type": "bytes"
       }
     ],
-    "name": "Current",
+    "name": "Finalized",
     "type": "event",
-    "signature": "0xd3bed6b350c548f8ecd5aa592c13a6a67bff7ccf6aae87aa3743bc25d8b130e3"
+    "signature": "0x7d5242f52c478159b4963f0898012c593d0786bfa3bce2e9bb2f073b068caee0"
   },
   {
     "constant": false,
@@ -249,14 +278,6 @@
       {
         "name": "_xrt",
         "type": "address"
-      },
-      {
-        "name": "_minimalStake",
-        "type": "uint256"
-      },
-      {
-        "name": "_timeoutInBlocks",
-        "type": "uint256"
       }
     ],
     "name": "setup",
@@ -269,79 +290,123 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function",
-    "signature": "0x64f6f7b9"
+    "signature": "0x66d38203"
   },
   {
     "constant": false,
     "inputs": [
       {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "refill",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xca9d07ba"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0x2e1a7d4d"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_demand",
+        "name": "_model",
         "type": "bytes"
       },
       {
-        "name": "_offer",
+        "name": "_objective",
         "type": "bytes"
-      }
-    ],
-    "name": "createLiability",
-    "outputs": [
+      },
       {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function",
-    "signature": "0xd2b962f2"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_liability",
+        "name": "_token",
         "type": "address"
       },
+      {
+        "name": "_cost",
+        "type": "uint256"
+      },
+      {
+        "name": "_lighthouse",
+        "type": "address"
+      },
+      {
+        "name": "_validator",
+        "type": "address"
+      },
+      {
+        "name": "_validator_fee",
+        "type": "uint256"
+      },
+      {
+        "name": "_deadline",
+        "type": "uint256"
+      },
+      {
+        "name": "_nonce",
+        "type": "bytes32"
+      },
+      {
+        "name": "_signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "demand",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xd9ff764a"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_model",
+        "type": "bytes"
+      },
+      {
+        "name": "_objective",
+        "type": "bytes"
+      },
+      {
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "name": "_cost",
+        "type": "uint256"
+      },
+      {
+        "name": "_validator",
+        "type": "address"
+      },
+      {
+        "name": "_lighthouse",
+        "type": "address"
+      },
+      {
+        "name": "_lighthouse_fee",
+        "type": "uint256"
+      },
+      {
+        "name": "_deadline",
+        "type": "uint256"
+      },
+      {
+        "name": "_nonce",
+        "type": "bytes32"
+      },
+      {
+        "name": "_signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "offer",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function",
+    "signature": "0xd5056962"
+  },
+  {
+    "constant": false,
+    "inputs": [
       {
         "name": "_result",
         "type": "bytes"
@@ -355,7 +420,7 @@
         "type": "bytes"
       }
     ],
-    "name": "finalizeLiability",
+    "name": "finalize",
     "outputs": [
       {
         "name": "",
@@ -365,6 +430,6 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function",
-    "signature": "0x563e52d5"
+    "signature": "0x4fe6365e"
   }
 ]
