@@ -74,7 +74,11 @@ export default class Robonomics {
     if (options.ens) {
       ens = options.ens
     }
-    this.ens = new ENS(this.web3, ens, this.version)
+    let ensSuffix = 'eth'
+    if (options.ensSuffix) {
+      ensSuffix = options.ensSuffix
+    }
+    this.ens = new ENS(this.web3, ens, this.version, ensSuffix)
 
     this.eventTimeout = 10000
     if (options.eventTimeout) {

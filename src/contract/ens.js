@@ -4,14 +4,15 @@ import EnsResolver from './ensResolver'
 import ABI from '../abi/ENS.json'
 
 export default class Ens extends Contract {
-  constructor(web3, address, version) {
+  constructor(web3, address, version, suffix = 'eth') {
     super(web3, ABI, address)
     this.version = version
+    this.suffix = suffix
     this.resolver = null
   }
 
   async init() {
-    const resolver = await this.call('resolver', [namehash.hash(this.version + '.robonomics.eth')])
+    const resolver = await this.call('resolver', [namehash.hash(this.version + '.robonomics.' + this.suffix)])
     this.resolver = new EnsResolver(this.web3, resolver)
   }
 
@@ -29,8 +30,8 @@ export default class Ens extends Contract {
 
   getUrl(name, zone = null) {
     let url = this.getUrlZone(name, zone)
-    if (/\.robonomics\.eth$/.test(name) === false) {
-      url += '.' + this.version + '.robonomics.eth'
+    if (new RegExp('.robonomics.' + this.suffix).test(name) === false) {
+      url += '.' + this.version + '.robonomics.' + this.suffix
     }
     return url
   }
