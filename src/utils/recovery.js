@@ -40,11 +40,11 @@ const hashDemand = msg => (
     { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.model)) },
     { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.objective)) },
     { type: 'address', value: msg.token },
-    { type: 'uint256', value: msg.cost },
+    { type: 'uint256', value: String(Number(msg.cost)) },
     { type: 'address', value: msg.lighthouse },
     { type: 'address', value: msg.validator },
-    { type: 'uint256', value: msg.validatorFee },
-    { type: 'uint256', value: msg.deadline },
+    { type: 'uint256', value: String(Number(msg.validatorFee)) },
+    { type: 'uint256', value: String(Number(msg.deadline)) },
     { type: 'bytes32', value: msg.nonce }
   )
 )
@@ -53,11 +53,11 @@ const hashOffer = msg => (
     { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.model)) },
     { type: 'bytes', value: web3Beta.utils.bytesToHex(base58.decode(msg.objective)) },
     { type: 'address', value: msg.token },
-    { type: 'uint256', value: msg.cost },
+    { type: 'uint256', value: String(Number(msg.cost)) },
     { type: 'address', value: msg.validator },
     { type: 'address', value: msg.lighthouse },
-    { type: 'uint256', value: msg.lighthouseFee },
-    { type: 'uint256', value: msg.deadline },
+    { type: 'uint256', value: String(Number(msg.lighthouseFee)) },
+    { type: 'uint256', value: String(Number(msg.deadline)) },
     { type: 'bytes32', value: msg.nonce }
   )
 )

@@ -20,7 +20,11 @@ export default class Base {
       if (!_has(data, name)) {
         throw new Error("Not found init property " + name)
       }
-      this[name] = data[name]
+      if (name === 'cost' || name === 'deadline' || name === 'lighthouseFee') {
+        this[name] = Number(data[name])
+      } else {
+        this[name] = data[name]
+      }
     })
   }
 
