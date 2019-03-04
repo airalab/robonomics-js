@@ -1,7 +1,7 @@
-Проверить кол-во одобренных токенов
-========
+# Проверить кол-во одобренных токенов
 
 ```javascript
-robonomics.xrt.call('allowance', [robonomics.account, robonomics.factory.address])
-	.then((allowance) => console.log('allowance', allowance))
+robonomics.xrt.call
+  .allowance(robonomics.account, robonomics.factory.address)
+  .then(allowance => console.log('allowance', allowance));
 ```

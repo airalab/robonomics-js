@@ -1,6 +1,5 @@
-Сменить маяк
-========
+# Сменить маяк
 
 ```javascript
-robonomics.setLighthouse(name)
+robonomics.initLighthouse(name);
 ```

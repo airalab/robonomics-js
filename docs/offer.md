@@ -1,23 +1,28 @@
-Предложение
-========
+# Предложение
 
 Получаем все приходящие сообщения предложений на маяк, по выбранной модели
 
 ```javascript
-const model = 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg'
-robonomics.getOffer(model, (msg) => {
-	console.log(msg)
-})
+const model = 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg';
+robonomics.onOffer(model, msg => {
+  console.log(msg);
+});
 ```
 
 Допустимые поля
 
- - objective - задача в виде ipfs хеша на rosbag файл
+- model -модель в виде ipfs хеша на rosbag файл
 
- - token - адрес токена для оплата
+- objective - задача в виде ipfs хеша на rosbag файл
 
- - cost - стоимость
+- token - адрес токена для оплата
 
- - lighthouseFee - комиссия маяка
+- cost - стоимость
 
- - deadline - номер блока после которого спрос будет не действителен
+- validator - адрес валидатора
+
+- lighthouse - адрес маяка
+
+- lighthouseFee - комиссия маяка
+
+- deadline - номер блока после которого спрос будет не действителен

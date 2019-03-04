@@ -1,7 +1,7 @@
-Проверить баланс
-========
+# Проверить баланс
 
 ```javascript
-robonomics.xrt.call('balanceOf', [robonomics.account])
-  .then((balance) => console.log('balance', balance))
+robonomics.xrt.call
+  .balanceOf(robonomics.account)
+  .then(balance => console.log('balance', balance));
 ```

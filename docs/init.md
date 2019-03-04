@@ -1,12 +1,12 @@
-Инициализация
-========
+# Инициализация
 
 ```javascript
 import Robonomics, { MessageProviderIpfsApi } from 'robonomics-js'
 import IPFS from 'ipfs-api'
 ​
 const robonomics = new Robonomics({
-	provider: new MessageProviderIpfsApi(new IPFS('http://localhost:5001'))
+	messageProvider: new MessageProviderIpfsApi(new IPFS('http://localhost:5001')),
+  lighthouse: 'airalab'
 })
 ​
 robonomics.ready().then(() => {
@@ -19,10 +19,20 @@ robonomics.ready().then(() => {
 
 ## Доступные параметры при инициалицации Robonomics
 
- - web3 (если используется в браузере например metamask, то этот параметр не обязателен, тк web3 будет доступен глобально)
- - account (если используется в браузере например metamask, то этот параметр не обязателен)
- - privateKey (приватный ключ параметр не обязателен)
- - provider (провайдер обмена сообщениями, в текущей версии используется ipfs)
- - version (используемая версия, по умолчанию последняя)
- - ens (адрес ENS, по умолчанию указан 0x314159265dD8dbb310642f98f50C066173C1259b из сети mainnet)
- - lighthouse (ens название маяка, по умолчанию airalab.lighthouse.0.robonomics.eth)
+```
+{
+  web3,
+  messageProvider, (провайдер обмена сообщениями, в текущей версии используется ipfs)
+  account: {
+    address, (если указан приватный ключ параметр не обязателен)
+    privateKey, (приватный ключ параметр не обязателен)
+    isSignPrefix (довавлять префикс или нет)
+  },
+  ens: {
+		version, (используемая версия, по умолчанию последняя)
+		address, (адрес ENS, по умолчанию указан 0x314159265dD8dbb310642f98f50C066173C1259b из сети mainnet)
+		suffix (по умолчанию eth)
+	},
+  lighthouse (ens название маяка, по умолчанию airalab.lighthouse.0.robonomics.eth)
+}
+```
