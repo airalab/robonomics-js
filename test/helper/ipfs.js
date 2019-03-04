@@ -1,21 +1,24 @@
-class PubSub {
+import EventEmitter from 'events';
+
+class PubSub extends EventEmitter {
   constructor() {
-    this.events = {}
+    super();
+    this.emit('ready', true);
   }
   subscribe(topic, cb) {
-    this.events[topic] = this.events[topic] || []
-    this.events[topic].push(cb)
+    this.on(topic, cb);
   }
   publish(topic, data, fn) {
-    if (this.events[topic]) {
-      this.events[topic].forEach((cb) => {
-        cb({ data })
-      })
-    }
-    fn(null)
+    this.emit(topic, { data });
+    fn(null);
+  }
+  unsubscribe(topic) {
+    this.removeAllListeners(topic);
   }
 }
 export default {
-  once: (n, cb) => { cb() },
+  isOnline: () => {
+    return true;
+  },
   pubsub: new PubSub()
-}
+};

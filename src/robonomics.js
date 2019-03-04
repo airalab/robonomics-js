@@ -1,282 +1,319 @@
-import Promise from 'bluebird'
-import _has from 'lodash/has'
-import XRT from './contract/xrt'
-import Factory from './contract/factory'
-import Lighthouse from './contract/lighthouse'
-import ENS from './contract/ens'
-import Channel from './channel'
-import Message from './message'
-import * as signers from './message/signer'
-
-let instance = null
-export const getInstance = () => {
-  return instance
-}
+import Promise from 'bluebird';
+import _has from 'lodash/has';
+import Account from './account';
+import ENS from './contract/ens';
+import XRT from './contract/xrt';
+import Factory from './contract/factory';
+import Lighthouse from './contract/lighthouse';
+import Messenger from './messenger/messenger';
+import Demand from './messenger/message/demand';
+import Offer from './messenger/message/offer';
+import { utils } from './web3Utils';
 
 export default class Robonomics {
-  constructor(options) {
-    this.channel = null
-    this.xrt = null
-    this.factory = null
-    this.lighthouse = null
-    this.init = []
+  constructor(config = {}) {
+    this.web3 = null;
+    this.account = null;
+    this.ens = null;
+    this.messageProvider = null;
+    this.xrt = null;
+    this.factory = null;
+    this.lighthouse = null;
+    this.messenger = null;
+    this.load = [];
+    this.init(config);
+  }
 
-    if (options.web3) {
-      this.web3 = options.web3
-    } else if (typeof window !== 'undefined' && window.web3) {
-      this.web3 = window.web3
-    } else {
-      throw new Error('Required web3')
+  init(config) {
+    if (config.web3) {
+      if (_has(config.web3, 'version')) {
+        this.setWeb3(config.web3);
+      } else if (_has(config.web3, 'provider')) {
+        this.initWeb3(config.web3);
+      } else {
+        throw new Error('Bad config web3');
+      }
     }
-
-    this.isPrivateKey = false
-    this.privateKey = null
-    if (options.account) {
-      this.account = options.account
-    } else if (options.privateKey) {
-      this.isPrivateKey = true
-      this.privateKey = options.privateKey
-      this.account = signers.getAddressPrivateKey(this.privateKey)
-    } else if (this.web3.eth.coinbase) {
-      this.account = this.web3.eth.coinbase
-    } else {
-      throw new Error('Required account')
+    if (config.account) {
+      this.initAccount(config.account);
     }
-    this.account = this.web3.toChecksumAddress(this.account)
-
-    if (options.provider) {
-      this.provider = options.provider
-      this.init.push(this.provider.ready())
-    } else {
-      throw new Error('Required provider')
+    if (config.ens) {
+      this.initEns(config.ens);
+      this.load.push(this.initXrt());
+      this.load.push(this.initFactory());
     }
-
-    let signPrefix = true
-    if (_has(options, 'signPrefix')) {
-      signPrefix = Boolean(options.signPrefix)
-    } else if (_has(this.web3.currentProvider, 'isMetaMask') && this.web3.currentProvider.isMetaMask) {
-      signPrefix = false
+    if (config.messageProvider) {
+      this.setMessageProvider(config.messageProvider);
     }
-    if (options.signer) {
-      this.signer = options.signer()
-    } else if (this.isPrivateKey === false) {
-      this.signer = signers.account(this.web3, this.account, signPrefix)
-    } else {
-      this.signer = signers.privateKey(this.privateKey, signPrefix)
+    if (config.lighthouse) {
+      this.load.push(this.initLighthouse(config.lighthouse));
     }
-    this.message = new Message(this.signer)
-
-    this.version = 4
-    if (_has(options, 'version')) {
-      this.version = options.version
-    }
-    let ens = '0x314159265dD8dbb310642f98f50C066173C1259b'
-    if (options.ens) {
-      ens = options.ens
-    }
-    let ensSuffix = 'eth'
-    if (options.ensSuffix) {
-      ensSuffix = options.ensSuffix
-    }
-    this.ens = new ENS(this.web3, ens, this.version, ensSuffix)
-
-    this.eventTimeout = 10000
-    if (options.eventTimeout) {
-      this.eventTimeout = options.eventTimeout
-    }
-
-    this.init.push(
-      this.ens.ready()
-        .then(() => {
-          return Promise.join(this.ens.addr('xrt'), this.ens.addr('factory'),
-            (xrt, factory) => {
-              this.xrt = new XRT(this.web3, xrt)
-              this.factory = new Factory(this.web3, factory)
-              if (options.lighthouse) {
-                return this.setLighthouse(options.lighthouse)
-              }
-              return this.setLighthouse('airalab')
-            })
-        })
-    )
-    instance = this
   }
 
   ready() {
-    return Promise.all(this.init)
+    return Promise.all(this.load);
   }
 
-  async setLighthouse(lighthouse) {
-    let address = await this.ens.addrLighthouse(lighthouse)
-    address = this.web3.toChecksumAddress(address)
-    this.lighthouse = new Lighthouse(this.web3, address, lighthouse)
-    this.channel = new Channel(this.ens.getUrl(lighthouse, 'lighthouse'), this.provider)
+  setWeb3(web3) {
+    this.web3 = web3;
   }
 
-  getLighthouses(options = { fromBlock: 0, toBlock: 'latest' }) {
+  initWeb3() {
+    throw new Error('Bad config web3');
+    // this.setWeb3(
+    //   new Web3(config.provider, config.net || {}, config.options || {})
+    // );
+  }
+
+  setAccount(account) {
+    this.account = account;
+    if (this.web3.currentProvider.isMetaMask) {
+      this.account.setSigner(msg =>
+        Promise.promisify(this.web3.eth.sign)(this.account.address, msg)
+      );
+    }
+  }
+
+  initAccount(config) {
+    this.setAccount(
+      new Account(
+        config.address || null,
+        config.privateKey || null,
+        config.isSignPrefix || true
+      )
+    );
+  }
+
+  setEns(ens) {
+    this.ens = ens;
+  }
+
+  initEns(config) {
+    if (this.web3 === null) {
+      throw new Error('Require web3');
+    }
+    this.setEns(
+      new ENS(
+        this.web3,
+        config.address || '0x314159265dD8dbb310642f98f50C066173C1259b',
+        config.version || 5,
+        config.suffix || 'eth'
+      )
+    );
+  }
+
+  setMessageProvider(provider) {
+    this.messageProvider = provider;
+  }
+
+  setXrt(xrt) {
+    this.xrt = xrt;
+  }
+
+  async initXrt() {
+    if (this.web3 === null) {
+      throw new Error('Require web3');
+    }
+    if (this.ens === null) {
+      throw new Error('Require ENS');
+    }
+    const xrt = new XRT(this.web3, await this.ens.addr('xrt'));
+    this.setXrt(xrt);
+    return xrt;
+  }
+
+  setFactory(factory) {
+    this.factory = factory;
+  }
+
+  async initFactory() {
+    if (this.web3 === null) {
+      throw new Error('Require web3');
+    }
+    if (this.ens === null) {
+      throw new Error('Require ENS');
+    }
+    const factory = new Factory(this.web3, await this.ens.addr('factory'));
+    this.setFactory(factory);
+    return factory;
+  }
+
+  setLighthouse(lighthouse) {
+    this.lighthouse = lighthouse;
+    this.initMessenger(lighthouse);
+  }
+
+  async initLighthouse(name) {
+    if (this.web3 === null) {
+      throw new Error('Require web3');
+    }
+    if (this.ens === null) {
+      throw new Error('Require ENS');
+    }
+    let address = name;
+    let ensName = name;
+    if (utils.isAddress(name) === false) {
+      address = await this.ens.addrLighthouse(name);
+      ensName = this.ens.getUrl(name, 'lighthouse');
+    }
+    const lighthouse = new Lighthouse(this.web3, address, ensName);
+    this.setLighthouse(lighthouse);
+    return lighthouse;
+  }
+
+  setMessenger(messenger) {
+    this.messenger = messenger;
+  }
+
+  createChannel(lighthouse) {
+    if (this.messageProvider === null) {
+      throw new Error('Require messageProvider');
+    }
+    return this.messageProvider.createChannel(lighthouse.name);
+  }
+
+  createMessenger(channel) {
+    if (this.account === null) {
+      throw new Error('Require account');
+    }
+    return new Messenger(channel, this.account);
+  }
+
+  initMessenger(lighthouse) {
+    const channel = this.createChannel(lighthouse);
+    const messenger = this.createMessenger(channel);
+    this.setMessenger(messenger);
+    return messenger;
+  }
+
+  async send(type, data) {
+    const message = Messenger.create(type, {
+      sender: this.account.address,
+      ...data
+    });
+    if (
+      (message instanceof Demand || message instanceof Offer) &&
+      message.nonce === 0
+    ) {
+      message.nonce = Number(await this.factory.call.nonceOf(message.sender));
+    }
+    return this.messenger.send(message);
+  }
+
+  sendDemand(data, isWatchLiability = true, cb = null) {
+    return this.send(Messenger.TYPE_DEMAND, data).then(message => {
+      if (cb !== null) {
+        cb(message);
+      }
+      if (isWatchLiability) {
+        return this.liabilityByDemand(message);
+      }
+      return true;
+    });
+  }
+
+  liabilityByDemand(message) {
     return new Promise((resolve, reject) => {
-      this.factory.contract.NewLighthouse({}, options).get((error, result) => {
-        if (!error) {
-          const lighthouses = []
-          result.forEach((item) => {
-            lighthouses.push({
-              name: this.ens.getUrl(item.args.name, 'lighthouse'),
-              addr: item.args.lighthouse,
-            })
-          })
-          resolve(lighthouses)
-        } else {
-          reject(error)
+      const watcher = this.onLiability((e, liability) => {
+        if (e) {
+          return reject(e);
         }
-      })
-    })
+        liability
+          .equalDemand(message.getHash())
+          .then(r => {
+            if (r) {
+              watcher.stopWatching();
+              resolve(liability);
+            }
+          })
+          .catch(e => {
+            reject(e);
+          });
+      });
+    });
   }
 
-  getMarkets() {
-    return Promise.resolve([])
+  onDemand(model, cb) {
+    return this.messenger.onDemand((err, message) => {
+      if (err) {
+        return;
+      }
+      if (model === null || message.model === model) {
+        cb(message);
+      }
+    });
   }
 
-  getModel(market) {
-    return this.ens.addrModel(market)
-      .then((model) => {
-        if (model === '0x0000000000000000000000000000000000000000' && market.length === 46 && market.substring(0, 2) === 'Qm') {
-          return market
-        } else if (model === '0x0000000000000000000000000000000000000000') {
-          throw new Error('not found model')
+  sendOffer(data, isWatchLiability = true, cb = null) {
+    return this.send(Messenger.TYPE_OFFER, data).then(message => {
+      if (cb !== null) {
+        cb(message);
+      }
+      if (isWatchLiability) {
+        return this.liabilityByOffer(message);
+      }
+      return true;
+    });
+  }
+
+  liabilityByOffer(message) {
+    return new Promise((resolve, reject) => {
+      const watcher = this.onLiability((e, liability) => {
+        if (e) {
+          watcher.stopWatching();
+          return reject(e);
         }
-        return model
-      })
-  }
-
-  getDemand(market, cb) {
-    if (this.channel === null) {
-      throw new Error('Required lighthouse')
-    }
-    if (market === null) {
-      this.channel.demands((msg) => {
-        cb(msg)
-      })
-    } else {
-      this.getModel(market)
-        .then((model) => {
-          this.channel.demands((msg) => {
-            if (msg.model === model) {
-              cb(msg)
+        liability
+          .equalOffer(message.getHash())
+          .then(r => {
+            if (r) {
+              watcher.stopWatching();
+              resolve(liability);
             }
           })
-        })
-    }
+          .catch(e => {
+            watcher.stopWatching();
+            reject(e);
+          });
+      });
+    });
   }
 
-  getOffer(market, cb) {
-    if (this.channel === null) {
-      throw new Error('Required lighthouse')
-    }
-    if (market === null) {
-      this.channel.offers((msg) => {
-        cb(msg)
-      })
-    } else {
-      this.getModel(market)
-        .then((model) => {
-          this.channel.offers((msg) => {
-            if (msg.model === model) {
-              cb(msg)
-            }
-          })
-        })
-    }
+  onOffer(model, cb) {
+    return this.messenger.onOffer((err, message) => {
+      if (err) {
+        return;
+      }
+      if (model === null || message.model === model) {
+        cb(message);
+      }
+    });
   }
 
-  getResult(cb) {
-    if (this.channel === null) {
-      throw new Error('Required lighthouse')
-    }
-    this.channel.result((msg) => {
-      cb(msg)
-    })
+  sendResult(data) {
+    return this.send(Messenger.TYPE_RESULT, data);
   }
 
-  watchLiability(market, cb) {
-    return this.factory.watchLiability((liability) => {
-      liability.lighthouse()
-        .then((r) => {
-          if (r === this.lighthouse.address) {
-            if (market) {
-              Promise.join(this.getModel(market), liability.model(),
-                (marketAddr, liabilityMarketAddr) => {
-                  if (marketAddr === liabilityMarketAddr) {
-                    cb(liability)
-                  }
-                })
-            } else {
-              cb(liability)
-            }
-          }
-        })
-    })
+  onResult(cb) {
+    return this.messenger.onResult((err, message) => {
+      if (err) {
+        return;
+      }
+      cb(message);
+    });
   }
 
-  post(type, market, data) {
-    if (this.channel === null) {
-      throw new Error('Required lighthouse')
-    }
-    let msg
-    return this.getModel(market)
-      .then((model) => {
-        msg = this.message.create(type, { lighthouse: this.lighthouse.address, model, ...data })
-        return msg.sign()
-      })
-      .then(() => this.channel.push(msg))
-      .then(() => msg)
-  }
-
-  postOffer(market, data) {
-    return this.post('offer', market, data)
-      .then((msg) => {
-        return new Promise((resolve, reject) => {
-          const watcher = this.watchLiability(null, (liability) => {
-            liability.equalOffer({ ...msg, account: this.account })
-              .then((r) => {
-                if (r) {
-                  this.factory.stop(watcher)
-                  resolve(liability)
-                }
-              })
-              .catch((e) => {
-                reject(e)
-              })
-          })
-        })
-      })
-  }
-
-  postDemand(market, data) {
-    return this.post('demand', market, data)
-      .then((msg) => {
-        return new Promise((resolve, reject) => {
-          const watcher = this.watchLiability(null, (liability) => {
-            liability.equalDemand({ ...msg, account: this.account })
-              .then((r) => {
-                if (r) {
-                  this.factory.stop(watcher)
-                  resolve(liability)
-                }
-              })
-              .catch((e) => {
-                reject(e)
-              })
-          })
-        })
-      })
-  }
-
-  postResult(data) {
-    if (this.channel === null) {
-      throw new Error('Required lighthouse')
-    }
-    const msg = this.message.create('result', { ...data })
-    return msg.sign()
-      .then(() => this.channel.push(msg))
+  onLiability(cb) {
+    return this.factory.onLiability((e, liability) => {
+      if (e) {
+        cb(e);
+        return;
+      }
+      liability.lighthouse().then(r => {
+        if (r === this.lighthouse.address) {
+          cb(null, liability);
+        }
+      });
+    });
   }
 }

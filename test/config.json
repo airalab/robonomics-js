@@ -1,12 +1,21 @@
 {
-  "account": {
-    "address": "0xbb1DA37368aA2CB7E688EBEe58c54C10Bf56d2E3",
-    "privateKey": "0xc91baab1fcfdacc831886f1576c78598d4ca615681b67da5de3d09a754197872"
+  "accounts": {
+    "demand": {
+      "address": "0xbb1DA37368aA2CB7E688EBEe58c54C10Bf56d2E3",
+      "privateKey": "0xc91baab1fcfdacc831886f1576c78598d4ca615681b67da5de3d09a754197872"
+    },
+    "offer": {
+      "address": "0x302aA0306400a1469A7C2c71Ed6d31c3E1B3826c",
+      "privateKey": "0x8d6c71031be3ad8d6d83d9094b218b5bdda56a7985c445954cb7aa0c4258490c"
+    },
+    "provider": {
+      "address": "0xfc74087955958111f86b4e383cf1c769837297d5",
+      "privateKey": "0xf844306697189b0291c31e927b0b5fd393b9561a1e2f9dac537d21d5f8371fc5"
+    }
   },
   "robonomics": {
     "web3": "http://localhost:9545",
     "signPrefix": false,
-    "eventTimeout": 1000,
-    "ens": ""
+    "ens": "0x5577fE5AC51d179a6Db5C6b9f515a9723B041945"
   }
 }

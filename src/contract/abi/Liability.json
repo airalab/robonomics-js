@@ -328,8 +328,8 @@
         "type": "uint256"
       },
       {
-        "name": "_nonce",
-        "type": "bytes32"
+        "name": "_sender",
+        "type": "address"
       },
       {
         "name": "_signature",
@@ -346,7 +346,7 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function",
-    "signature": "0xd9ff764a"
+    "signature": "0x48a984e4"
   },
   {
     "constant": false,
@@ -384,8 +384,8 @@
         "type": "uint256"
       },
       {
-        "name": "_nonce",
-        "type": "bytes32"
+        "name": "_sender",
+        "type": "address"
       },
       {
         "name": "_signature",
@@ -402,7 +402,7 @@
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function",
-    "signature": "0xd5056962"
+    "signature": "0x413781d2"
   },
   {
     "constant": false,

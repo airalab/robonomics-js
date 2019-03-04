@@ -1,10 +1,6 @@
 {
   "extends": ["eslint:recommended"],
   "parser": "babel-eslint",
-  "rules": {
-    "semi": [1, "never"],
-    "no-console": 0
-  },
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
@@ -16,8 +12,5 @@
     "node": true,
     "es6": true,
     "jest": true
-  },
-  "globals": {
-    "window": true
   }
 }

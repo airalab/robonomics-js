@@ -1,38 +1,46 @@
-import Contract from './contract'
-import Liability from './liability'
-import Lighthouse from './lighthouse'
-import Event from './event'
-import ABI from '../abi/Factory.json'
-import { getInstance } from '../robonomics'
+import Contract from './contract';
+import Liability from './liability';
+import Lighthouse from './lighthouse';
+import ABI from './abi/Factory.json';
 
 export default class Factory extends Contract {
   constructor(web3, address) {
-    super(web3, ABI, address)
+    super(web3, ABI, address);
   }
 
-  watchLiability(cb) {
-    const robonomics = getInstance()
-    const event = new Event(this.web3, robonomics.lighthouse.address, this.contract, 'NewLiability', robonomics.eventTimeout)
-    event.watch((result) => {
+  onLiability(cb) {
+    return this.event.NewLiability((error, result) => {
+      if (error) {
+        cb(error);
+        return;
+      }
       this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
-        const liability = new Liability(this.web3, result.args.liability, r.from)
-        cb(liability)
-      })
-    })
-    return event
+        if (e) {
+          cb(e);
+          return;
+        }
+        const liability = new Liability(
+          this.web3,
+          result.args.liability,
+          r.from
+        );
+        cb(null, liability);
+      });
+    });
   }
 
-  watchLighthouse(cb) {
-    const robonomics = getInstance()
-    const event = new Event(this.web3, this.contract.address, this.contract, 'NewLighthouse', robonomics.eventTimeout)
-    event.watch((result) => {
-      const lighthouse = new Lighthouse(this.web3, result.args.lighthouse, result.args.name)
-      cb(lighthouse, result)
-    })
-    return event
-  }
-
-  stop(event) {
-    return event.stopWatching()
+  onLighthouse(cb) {
+    return this.event.NewLighthouse((error, result) => {
+      if (error) {
+        cb(error);
+        return;
+      }
+      const lighthouse = new Lighthouse(
+        this.web3,
+        result.args.lighthouse,
+        result.args.name
+      );
+      cb(null, lighthouse);
+    });
   }
 }
