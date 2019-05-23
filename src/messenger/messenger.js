@@ -69,7 +69,6 @@ export default class Messenger {
         callback(new Error('Type not allocated'), null);
       }
       const message = Messenger.create(type, data);
-      message.account = message.recovery(this.account.isSignPrefix);
       callback(null, message);
     };
     this.channel.on(listener);

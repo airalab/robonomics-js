@@ -170,7 +170,7 @@ describe('Messages', () => {
     demand.token = robonomicsDemand.xrt.address;
     demand.lighthouse = robonomicsDemand.lighthouse.address;
     const listener = robonomicsDemand.onDemand(demand.model, msg => {
-      expect(msg.account).toEqual(robonomicsDemand.account.address);
+      expect(msg.sender).toEqual(robonomicsDemand.account.address);
       expect(msg).toBeInstanceOf(Demand);
       robonomicsDemand.messenger.off(listener);
       done();
@@ -183,7 +183,7 @@ describe('Messages', () => {
     offer.token = robonomicsOffer.xrt.address;
     offer.lighthouse = robonomicsOffer.lighthouse.address;
     const listener = robonomicsOffer.onOffer(offer.model, msg => {
-      expect(msg.account).toEqual(robonomicsOffer.account.address);
+      expect(msg.sender).toEqual(robonomicsOffer.account.address);
       expect(msg).toBeInstanceOf(Offer);
       robonomicsOffer.messenger.off(listener);
       done();
@@ -194,7 +194,7 @@ describe('Messages', () => {
     expect.assertions(2);
     const result = msgs.results.blank;
     const listener = robonomicsOffer.onResult(msg => {
-      expect(msg.account).toEqual(robonomicsOffer.account.address);
+      expect(msg.sender).toEqual(robonomicsOffer.account.address);
       expect(msg).toBeInstanceOf(Result);
       robonomicsOffer.messenger.off(listener);
       done();
@@ -261,7 +261,7 @@ describe('Contract', () => {
       .then(() => {
         result.liability = liability.address;
         robonomicsOffer.onResult(msg => {
-          expect(msg.account).toEqual(robonomicsOffer.account.address);
+          expect(msg.sender).toEqual(robonomicsOffer.account.address);
           expect(msg).toBeInstanceOf(Result);
         });
         liability.onResult().then(r => {
