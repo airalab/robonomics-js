@@ -6,9 +6,9 @@ const stake = 1000 // Wn
 ​
 robonomics.initLighthouse(name)
 ​
-robonomics.xrt.send.approve(robonomics.lighthouse.address, stake, { from: robonomics.account })
+robonomics.xrt.send.approve(robonomics.lighthouse.address, stake, { from: robonomics.account.address })
 	.then((tx) => console.log(tx))
 ​
-robonomics.lighthouse.send.refill(stake, { from: robonomics.account })
+robonomics.lighthouse.send.refill(stake, { from: robonomics.account.address })
   .then((tx) => console.log(tx))
 ```

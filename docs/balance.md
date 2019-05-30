@@ -2,6 +2,6 @@
 
 ```javascript
 robonomics.xrt.call
-  .balanceOf(robonomics.account)
+  .balanceOf(robonomics.account.address)
   .then(balance => console.log('balance', balance));
 ```

@@ -2,6 +2,6 @@
 
 ```javascript
 robonomics.xrt.call
-  .allowance(robonomics.account, robonomics.factory.address)
+  .allowance(robonomics.account.address, robonomics.factory.address)
   .then(allowance => console.log('allowance', allowance));
 ```

@@ -1,5 +1,4 @@
-Robonomics-js
-========
+# Robonomics-js
 
 Простая Javascript библиотека для работы с данными сети Robonomics
 

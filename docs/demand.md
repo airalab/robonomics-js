@@ -8,6 +8,7 @@ robonomics.onDemand(model, msg => {
   console.log(msg);
 });
 const demand = {
+  model: model,
   objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M',
   token: robonomics.xrt.address,
   cost: 1,
@@ -17,7 +18,7 @@ const demand = {
 
 Допустимые поля
 
-- model -модель в виде ipfs хеша на rosbag файл
+- model - модель в виде ipfs хеша на rosbag файл
 
 - objective - задача в виде ipfs хеша на rosbag файл
 
@@ -33,12 +34,14 @@ const demand = {
 
 - deadline - номер блока после которого спрос будет не действителен
 
+- nonce - порядковый номер
+
 Предварительно нужно одобрить необходимое кол-во токенов
 
 ```javascript
 robonomics.xrt.send
   .approve(robonomics.factory.address, demand.cost, {
-    from: robonomics.account
+    from: robonomics.account.address
   })
   .then(receipt => console.log(receipt));
 ```
@@ -50,7 +53,7 @@ import { Token } from 'robonomics-js';
 const token = new Token(robonomics.web3, '0x1231321321321321321321321');
 token.send
   .approve(robonomics.factory.address, demand.cost, {
-    from: robonomics.account
+    from: robonomics.account.address
   })
   .then(receipt => console.log(receipt));
 ```
