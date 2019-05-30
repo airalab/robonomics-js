@@ -58,7 +58,9 @@ export default class Contract {
                 }
               })
               .catch(e => {
-                cb(e);
+                if (cb !== null) {
+                  cb(e);
+                }
               })
               .then(() => watchTx(target.web3, txHash));
           };
