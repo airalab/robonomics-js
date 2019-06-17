@@ -5,7 +5,6 @@ import { setPrefix } from '../../utils';
 export default class Base {
   constructor() {
     this._props = [];
-    this.account = null;
   }
 
   initProps(data) {
