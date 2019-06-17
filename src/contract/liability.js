@@ -5,7 +5,7 @@ import { hexToStr } from '../utils';
 import ABI from './abi/Liability.json';
 
 export default class Liability extends Contract {
-  constructor(web3, address, worker = null) {
+  constructor(web3, address, worker = '0x0000000000000000000000000000000000000000') {
     super(web3, ABI, address);
     this.worker = utils.toChecksumAddress(worker);
   }
