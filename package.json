@@ -1,6 +1,6 @@
 {
   "name": "robonomics-js",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "src/index.js",
   "module": "lib/index.js",
   "license": "BSD-3-Clause",
