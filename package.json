@@ -23,20 +23,20 @@
     "@babel/node": "^7.2.2",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.4",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.0.3",
     "babel-plugin-inline-json": "^1.2.2",
-    "eslint": "^5.15.0",
-    "jest": "^24.1.0",
-    "rimraf": "^2.6.3"
+    "eslint": "^6.4.0",
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "base-x": "^3.0.5",
+    "base-x": "^3.0.7",
     "better-queue": "^3.8.10",
-    "bluebird": "^3.5.3",
+    "bluebird": "^3.5.5",
     "eth-ens-namehash": "^2.0.8",
     "eth-lib": "^0.2.8",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "web3": "0.20.7",
     "web3-eth-abi": "1.0.0-beta.47",
     "web3-utils": "1.0.0-beta.47"

@@ -50,6 +50,7 @@ export default class Messenger {
     ) {
       throw new Error('Bad type message');
     }
+    // eslint-disable-next-line require-atomic-updates
     message.signature = await this.account.signMessage(message);
     this.channel.send(message.encode());
     return message;
