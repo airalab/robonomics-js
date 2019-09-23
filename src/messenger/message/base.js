@@ -36,7 +36,6 @@ export default class Base {
   encode() {
     const msg = this.toObject();
     msg.signature = msg.signature.replace('0x', '');
-    delete msg.nonce;
     return Buffer.from(JSON.stringify(msg));
   }
 
