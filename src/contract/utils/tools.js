@@ -5,7 +5,7 @@ export const watchTx = (web3, tx) => {
     web3.eth.getTransactionReceipt(tx, (error, receipt) => {
       if (error) {
         reject(error);
-      } else if (receipt === null) {
+      } else if (receipt === null || (receipt.status === '0x1' && receipt.blockNumber === null)) {
         setTimeout(() => transactionReceiptAsync(resolve, reject), 5000);
       } else {
         resolve(receipt);
@@ -13,7 +13,7 @@ export const watchTx = (web3, tx) => {
     });
   };
   if (Array.isArray(tx)) {
-    return Promise.all(tx.map(oneTx => watchTx(oneTx)));
+    return Promise.all(tx.map(oneTx => watchTx(web3, oneTx)));
   } else if (typeof tx === 'string') {
     return new Promise(transactionReceiptAsync);
   }

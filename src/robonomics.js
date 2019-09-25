@@ -316,4 +316,22 @@ export default class Robonomics {
       });
     });
   }
+
+  onFeedback(cb) {
+    return this.messenger.onFeedback((err, message) => {
+      if (err) {
+        return;
+      }
+      cb(message);
+    });
+  }
+
+  onPending(cb) {
+    return this.messenger.onPending((err, message) => {
+      if (err) {
+        return;
+      }
+      cb(message);
+    });
+  }
 }

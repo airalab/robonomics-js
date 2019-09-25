@@ -2,6 +2,8 @@ import _has from 'lodash/has';
 import Demand from './message/demand';
 import Offer from './message/offer';
 import Result from './message/result';
+import Feedback from './message/feedback';
+import Pending from './message/pending';
 
 const decodeMsg = msg => {
   let json = {};
@@ -11,7 +13,7 @@ const decodeMsg = msg => {
     throw new Error(e);
   }
   const data = { ...json };
-  data.signature = '0x' + data.signature;
+  data.signature = '0x' + data.signature.replace(/0x/i, '');
   return data;
 };
 
@@ -24,6 +26,12 @@ export default class Messenger {
   }
   static get TYPE_RESULT() {
     return 'result';
+  }
+  static get TYPE_FEEDBACK() {
+    return 'feedback';
+  }
+  static get TYPE_PENDING() {
+    return 'pending';
   }
 
   constructor(channel, account) {
@@ -38,6 +46,10 @@ export default class Messenger {
       return new Offer(data);
     } else if (type === this.TYPE_RESULT) {
       return new Result(data);
+    } else if (type === this.TYPE_FEEDBACK) {
+      return new Feedback(data);
+    } else if (type === this.TYPE_PENDING) {
+      return new Pending(data);
     }
     throw new Error('Required type message');
   }
@@ -50,6 +62,7 @@ export default class Messenger {
     ) {
       throw new Error('Bad type message');
     }
+    // eslint-disable-next-line require-atomic-updates
     message.signature = await this.account.signMessage(message);
     this.channel.send(message.encode());
     return message;
@@ -63,10 +76,15 @@ export default class Messenger {
         type = Messenger.TYPE_DEMAND;
       } else if (_has(data, 'lighthouseFee')) {
         type = Messenger.TYPE_OFFER;
+      } else if (_has(data, 'accepted')) {
+        type = Messenger.TYPE_FEEDBACK;
+      } else if (_has(data, 'tx')) {
+        type = Messenger.TYPE_PENDING;
       } else if (_has(data, 'liability')) {
         type = Messenger.TYPE_RESULT;
       } else {
         callback(new Error('Type not allocated'), null);
+        return;
       }
       const message = Messenger.create(type, data);
       callback(null, message);
@@ -96,6 +114,24 @@ export default class Messenger {
   onResult(callback) {
     return this.on((error, message) => {
       if (!(message instanceof Result)) {
+        return;
+      }
+      callback(error, message);
+    });
+  }
+
+  onFeedback(callback) {
+    return this.on((error, message) => {
+      if (!(message instanceof Feedback)) {
+        return;
+      }
+      callback(error, message);
+    });
+  }
+
+  onPending(callback) {
+    return this.on((error, message) => {
+      if (!(message instanceof Pending)) {
         return;
       }
       callback(error, message);
