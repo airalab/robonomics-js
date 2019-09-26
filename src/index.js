@@ -7,6 +7,7 @@ export { default as MessageProviderIpfs } from './messenger/provider/ipfs';
 export {
   default as MessageProviderIpfsApi
 } from './messenger/provider/ipfsApi';
+export { default as Messenger } from './messenger/messenger';
 export { default as Factory } from './contract/factory';
 export { default as Liability } from './contract/liability';
 export { default as Lighthouse } from './contract/lighthouse';
