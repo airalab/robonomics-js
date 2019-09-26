@@ -13,7 +13,9 @@ const decodeMsg = msg => {
     throw new Error(e);
   }
   const data = { ...json };
-  data.signature = '0x' + data.signature.replace(/0x/i, '');
+  if (data.signature) {
+    data.signature = '0x' + data.signature.replace(/0x/i, '');
+  }
   return data;
 };
 
