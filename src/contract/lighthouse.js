@@ -25,7 +25,7 @@ export default class Lighthouse extends Contract {
       this.methods.keepAliveBlock().call(),
       this.methods.marker().call(),
       this.methods.quota().call()
-    ]).then(info => {
+    ]).then(function(info) {
       return {
         minimalStake: Number(info[0]),
         timeoutInBlocks: Number(info[1]),

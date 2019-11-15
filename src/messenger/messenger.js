@@ -4,7 +4,7 @@ import Result from "./message/result";
 import Feedback from "./message/feedback";
 import Pending from "./message/pending";
 
-const decodeMsg = msg => {
+function decodeMsg(msg) {
   let json = {};
   try {
     json = JSON.parse(Buffer.from(msg).toString("utf8"));
@@ -16,7 +16,7 @@ const decodeMsg = msg => {
     data.signature = "0x" + data.signature.replace(/0x/i, "");
   }
   return data;
-};
+}
 
 export default class Messenger {
   static get TYPE_DEMAND() {
@@ -70,7 +70,7 @@ export default class Messenger {
   }
 
   on(callback) {
-    const listener = msg => {
+    function listener(msg) {
       const data = decodeMsg(msg);
       let type;
       const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -93,13 +93,13 @@ export default class Messenger {
       }
       const message = Messenger.create(type, data);
       callback(null, message);
-    };
+    }
     this.channel.on(listener);
     return listener;
   }
 
   onDemand(callback) {
-    return this.on((error, message) => {
+    return this.on(function(error, message) {
       if (!(message instanceof Demand)) {
         return;
       }
@@ -108,7 +108,7 @@ export default class Messenger {
   }
 
   onOffer(callback) {
-    return this.on((error, message) => {
+    return this.on(function(error, message) {
       if (!(message instanceof Offer)) {
         return;
       }
@@ -117,7 +117,7 @@ export default class Messenger {
   }
 
   onResult(callback) {
-    return this.on((error, message) => {
+    return this.on(function(error, message) {
       if (!(message instanceof Result)) {
         return;
       }
@@ -126,7 +126,7 @@ export default class Messenger {
   }
 
   onFeedback(callback) {
-    return this.on((error, message) => {
+    return this.on(function(error, message) {
       if (!(message instanceof Feedback)) {
         return;
       }
@@ -135,7 +135,7 @@ export default class Messenger {
   }
 
   onPending(callback) {
-    return this.on((error, message) => {
+    return this.on(function(error, message) {
       if (!(message instanceof Pending)) {
         return;
       }

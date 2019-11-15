@@ -57,7 +57,10 @@ export default class Robonomics {
     if (this.web3.currentProvider.isMetaMask) {
       this.account.setSigner(msg => {
         return new Promise((resolve, reject) => {
-          this.web3.eth.sign(msg, this.account.address, (error, result) => {
+          this.web3.eth.sign(msg, this.account.address, function(
+            error,
+            result
+          ) {
             if (error) {
               reject(error);
               return;
@@ -211,20 +214,20 @@ export default class Robonomics {
 
   liabilityByDemand(message) {
     return new Promise((resolve, reject) => {
-      const watcher = this.onLiability((e, liability) => {
+      const watcher = this.onLiability(function(e, liability) {
         if (e) {
           watcher.unsubscribe();
           return reject(e);
         }
         liability
           .equalDemand(message.getHash())
-          .then(r => {
+          .then(function(r) {
             if (r) {
               watcher.unsubscribe();
               resolve(liability);
             }
           })
-          .catch(e => {
+          .catch(function(e) {
             watcher.unsubscribe();
             reject(e);
           });
@@ -233,7 +236,7 @@ export default class Robonomics {
   }
 
   onDemand(model, cb) {
-    return this.messenger.onDemand((err, message) => {
+    return this.messenger.onDemand(function(err, message) {
       if (err) {
         return;
       }
@@ -257,20 +260,20 @@ export default class Robonomics {
 
   liabilityByOffer(message) {
     return new Promise((resolve, reject) => {
-      const watcher = this.onLiability((e, liability) => {
+      const watcher = this.onLiability(function(e, liability) {
         if (e) {
           watcher.unsubscribe();
           return reject(e);
         }
         liability
           .equalOffer(message.getHash())
-          .then(r => {
+          .then(function(r) {
             if (r) {
               watcher.unsubscribe();
               resolve(liability);
             }
           })
-          .catch(e => {
+          .catch(function(e) {
             watcher.unsubscribe();
             reject(e);
           });
@@ -279,7 +282,7 @@ export default class Robonomics {
   }
 
   onOffer(model, cb) {
-    return this.messenger.onOffer((err, message) => {
+    return this.messenger.onOffer(function(err, message) {
       if (err) {
         return;
       }
@@ -294,7 +297,7 @@ export default class Robonomics {
   }
 
   onResult(cb) {
-    return this.messenger.onResult((err, message) => {
+    return this.messenger.onResult(function(err, message) {
       if (err) {
         return;
       }
@@ -317,7 +320,7 @@ export default class Robonomics {
   }
 
   onFeedback(cb) {
-    return this.messenger.onFeedback((err, message) => {
+    return this.messenger.onFeedback(function(err, message) {
       if (err) {
         return;
       }
@@ -326,7 +329,7 @@ export default class Robonomics {
   }
 
   onPending(cb) {
-    return this.messenger.onPending((err, message) => {
+    return this.messenger.onPending(function(err, message) {
       if (err) {
         return;
       }

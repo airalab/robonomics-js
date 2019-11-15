@@ -14,7 +14,9 @@ export default class Ipfs extends Abstract {
       if (this._ipfs.isOnline()) {
         resolve(true);
       } else {
-        this._ipfs.on("ready", () => resolve(true));
+        this._ipfs.on("ready", function() {
+          resolve(true);
+        });
       }
     });
   }
@@ -25,7 +27,7 @@ export default class Ipfs extends Abstract {
 
   send(topic, message) {
     return new Promise((resolve, reject) => {
-      this._ipfs.pubsub.publish(topic, message, err => {
+      this._ipfs.pubsub.publish(topic, message, function(err) {
         if (err) {
           return reject(err);
         }

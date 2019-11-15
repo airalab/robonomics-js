@@ -7,7 +7,9 @@ export default class Account {
     this.address = null;
     this.privateKey = null;
     this.isSignPrefix = isSignPrefix;
-    this._signer = () => Promise.reject("Error. Not signer");
+    this._signer = function() {
+      return Promise.reject("Error. Not signer");
+    };
 
     if (privateKey !== null) {
       this._setPrivateKey(privateKey);

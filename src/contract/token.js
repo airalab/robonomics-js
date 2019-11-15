@@ -12,7 +12,7 @@ export default class Token extends Contract {
       this.methods.totalSupply().call(),
       this.methods.decimals().call(),
       this.methods.symbol().call()
-    ]).then(info => {
+    ]).then(function(info) {
       return {
         name: info[0],
         totalSupply: Number(info[1]),

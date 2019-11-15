@@ -12,6 +12,8 @@ export default class EnsResolver extends Contract {
     return this.methods
       .addr(namehash.hash(name))
       .call()
-      .then(r => utils.toChecksumAddress(r));
+      .then(function(r) {
+        return utils.toChecksumAddress(r);
+      });
   }
 }

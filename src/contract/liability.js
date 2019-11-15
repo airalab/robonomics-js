@@ -34,7 +34,7 @@ export default class Liability extends Contract {
 
       this.methods.isSuccess().call(),
       this.methods.isFinalized().call()
-    ]).then(info => {
+    ]).then(function(info) {
       return {
         model: hexToStr(info[0]),
         objective: hexToStr(info[1]),
@@ -63,28 +63,34 @@ export default class Liability extends Contract {
     return this.methods
       .lighthouse()
       .call()
-      .then(r => utils.toChecksumAddress(r));
+      .then(function(r) {
+        return utils.toChecksumAddress(r);
+      });
   }
 
   result() {
     return this.methods
       .result()
       .call()
-      .then(r => (!r || r === "0x" ? "" : hexToStr(r)));
+      .then(function(r) {
+        return !r || r === "0x" ? "" : hexToStr(r);
+      });
   }
 
   model() {
     return this.methods
       .model()
       .call()
-      .then(r => hexToStr(r));
+      .then(function(r) {
+        return hexToStr(r);
+      });
   }
 
   equalDemand(hash) {
     return this.methods
       .demandHash()
       .call()
-      .then(r => {
+      .then(function(r) {
         if (hash === r) {
           return true;
         }
@@ -96,7 +102,7 @@ export default class Liability extends Contract {
     return this.methods
       .offerHash()
       .call()
-      .then(r => {
+      .then(function(r) {
         if (hash === r) {
           return true;
         }
@@ -106,7 +112,7 @@ export default class Liability extends Contract {
 
   onResult() {
     return new Promise((resolve, reject) => {
-      this.once("Finalized", {}, (error, event) => {
+      this.once("Finalized", {}, function(error, event) {
         if (error) {
           reject(error);
           return;
