@@ -1,6 +1,4 @@
-import _has from 'lodash/has';
-import { account } from '../../web3Utils';
-import { setPrefix } from '../../utils';
+import _has from "lodash/has";
 
 export default class Base {
   constructor() {
@@ -13,10 +11,10 @@ export default class Base {
         throw new Error(`Not found property: ${name}`);
       }
       if (
-        name === 'cost' ||
-        name === 'deadline' ||
-        name === 'lighthouseFee' ||
-        name === 'nonce'
+        name === "cost" ||
+        name === "deadline" ||
+        name === "lighthouseFee" ||
+        name === "nonce"
       ) {
         this[name] = Number(data[name]);
       } else {
@@ -36,13 +34,8 @@ export default class Base {
   encode() {
     const msg = this.toObject();
     if (msg.signature) {
-      msg.signature = msg.signature.replace(/0x/i, '');
+      msg.signature = msg.signature.replace(/0x/i, "");
     }
     return Buffer.from(JSON.stringify(msg));
-  }
-
-  recovery(isSignPrefix = true) {
-    const msg = isSignPrefix ? setPrefix(this.getHash()) : this.getHash();
-    return account.recover(msg, this.signature);
   }
 }

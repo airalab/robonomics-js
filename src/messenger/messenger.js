@@ -1,39 +1,39 @@
-import _has from 'lodash/has';
-import Demand from './message/demand';
-import Offer from './message/offer';
-import Result from './message/result';
-import Feedback from './message/feedback';
-import Pending from './message/pending';
+import _has from "lodash/has";
+import Demand from "./message/demand";
+import Offer from "./message/offer";
+import Result from "./message/result";
+import Feedback from "./message/feedback";
+import Pending from "./message/pending";
 
 const decodeMsg = msg => {
   let json = {};
   try {
-    json = JSON.parse(Buffer.from(msg).toString('utf8'));
+    json = JSON.parse(Buffer.from(msg).toString("utf8"));
   } catch (e) {
     throw new Error(e);
   }
   const data = { ...json };
   if (data.signature) {
-    data.signature = '0x' + data.signature.replace(/0x/i, '');
+    data.signature = "0x" + data.signature.replace(/0x/i, "");
   }
   return data;
 };
 
 export default class Messenger {
   static get TYPE_DEMAND() {
-    return 'demand';
+    return "demand";
   }
   static get TYPE_OFFER() {
-    return 'offer';
+    return "offer";
   }
   static get TYPE_RESULT() {
-    return 'result';
+    return "result";
   }
   static get TYPE_FEEDBACK() {
-    return 'feedback';
+    return "feedback";
   }
   static get TYPE_PENDING() {
-    return 'pending';
+    return "pending";
   }
 
   constructor(channel, account) {
@@ -53,7 +53,7 @@ export default class Messenger {
     } else if (type === this.TYPE_PENDING) {
       return new Pending(data);
     }
-    throw new Error('Required type message');
+    throw new Error("Required type message");
   }
 
   async send(message) {
@@ -62,7 +62,7 @@ export default class Messenger {
       !(message instanceof Offer) &&
       !(message instanceof Result)
     ) {
-      throw new Error('Bad type message');
+      throw new Error("Bad type message");
     }
     // eslint-disable-next-line require-atomic-updates
     message.signature = await this.account.signMessage(message);
@@ -74,18 +74,18 @@ export default class Messenger {
     const listener = msg => {
       const data = decodeMsg(msg);
       let type;
-      if (_has(data, 'validatorFee')) {
+      if (_has(data, "validatorFee")) {
         type = Messenger.TYPE_DEMAND;
-      } else if (_has(data, 'lighthouseFee')) {
+      } else if (_has(data, "lighthouseFee")) {
         type = Messenger.TYPE_OFFER;
-      } else if (_has(data, 'accepted')) {
+      } else if (_has(data, "accepted")) {
         type = Messenger.TYPE_FEEDBACK;
-      } else if (_has(data, 'tx')) {
+      } else if (_has(data, "tx")) {
         type = Messenger.TYPE_PENDING;
-      } else if (_has(data, 'liability')) {
+      } else if (_has(data, "liability")) {
         type = Messenger.TYPE_RESULT;
       } else {
-        callback(new Error('Type not allocated'), null);
+        callback(new Error("Type not allocated"), null);
         return;
       }
       const message = Messenger.create(type, data);
