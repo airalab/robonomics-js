@@ -1,4 +1,4 @@
-import EventEmitter from 'events';
+import EventEmitter from "events";
 
 export default class Channel {
   constructor(topic, provider) {
@@ -17,12 +17,12 @@ export default class Channel {
 
   on(callback) {
     this.run();
-    this.eventEmitter.on('message', callback);
+    this.eventEmitter.on("message", callback);
   }
 
   once(callback) {
     this.run();
-    this.eventEmitter.once('message', callback);
+    this.eventEmitter.once("message", callback);
   }
 
   send(message) {
@@ -37,11 +37,11 @@ export default class Channel {
    * @param {String} message
    */
   bridge(message) {
-    this.eventEmitter.emit('message', this.provider.messageDecode(message));
+    this.eventEmitter.emit("message", this.provider.messageDecode(message));
   }
 
   off(callback) {
-    this.eventEmitter.removeListener('message', callback);
+    this.eventEmitter.removeListener("message", callback);
   }
 
   stop() {

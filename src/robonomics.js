@@ -1,4 +1,3 @@
-import Promise from "bluebird";
 import utils from "web3-utils";
 import Account from "./account";
 import ENS from "./contract/ens";
@@ -56,9 +55,17 @@ export default class Robonomics {
   setAccount(account) {
     this.account = account;
     if (this.web3.currentProvider.isMetaMask) {
-      this.account.setSigner(msg =>
-        Promise.promisify(this.web3.eth.sign)(msg, this.account.address)
-      );
+      this.account.setSigner(msg => {
+        return new Promise((resolve, reject) => {
+          this.web3.eth.sign(msg, this.account.address, (error, result) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve(result);
+          });
+        });
+      });
     }
   }
 

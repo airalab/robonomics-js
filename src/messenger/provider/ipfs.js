@@ -1,11 +1,10 @@
-import Promise from 'bluebird';
-import Abstract from './abstract';
+import Abstract from "./abstract";
 
 export default class Ipfs extends Abstract {
   constructor(ipfs) {
     super();
     if (!ipfs.pubsub) {
-      throw new Error('This IPFS node does not have pubsub.');
+      throw new Error("This IPFS node does not have pubsub.");
     }
     this._ipfs = ipfs;
   }
@@ -15,7 +14,7 @@ export default class Ipfs extends Abstract {
       if (this._ipfs.isOnline()) {
         resolve(true);
       } else {
-        this._ipfs.on('ready', () => resolve(true));
+        this._ipfs.on("ready", () => resolve(true));
       }
     });
   }

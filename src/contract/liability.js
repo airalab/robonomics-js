@@ -1,40 +1,44 @@
-import Promise from 'bluebird';
-import Contract from './contract';
-import { utils } from '../web3Utils';
-import { hexToStr } from '../utils';
-import ABI from './abi/Liability.json';
+import utils from "web3-utils";
+import Contract from "./contract";
+import { hexToStr } from "../utils";
+import ABI from "./abi/Liability.json";
 
 export default class Liability extends Contract {
-  constructor(web3, address, worker = '0x0000000000000000000000000000000000000000') {
+  constructor(
+    web3,
+    address,
+    worker = "0x0000000000000000000000000000000000000000"
+  ) {
     super(web3, ABI, address);
     this.worker = utils.toChecksumAddress(worker);
   }
 
   getInfo() {
-    return Promise.join(
-      this.call.model(),
-      this.call.objective(),
-      this.call.result(),
+    return Promise.all([
+      this.methods.model().call(),
+      this.methods.objective().call(),
+      this.methods.result().call(),
 
-      this.call.token(),
-      this.call.cost(),
-      this.call.lighthouseFee(),
-      this.call.validatorFee(),
+      this.methods.token().call(),
+      this.methods.cost().call(),
+      this.methods.lighthouseFee().call(),
+      this.methods.validatorFee().call(),
 
-      this.call.demandHash(),
-      this.call.offerHash(),
+      this.methods.demandHash().call(),
+      this.methods.offerHash().call(),
 
-      this.call.promisor(),
-      this.call.promisee(),
-      this.call.lighthouse(),
-      this.call.validator(),
+      this.methods.promisor().call(),
+      this.methods.promisee().call(),
+      this.methods.lighthouse().call(),
+      this.methods.validator().call(),
 
-      this.call.isSuccess(),
-      this.call.isFinalized(),
-      (...info) => ({
+      this.methods.isSuccess().call(),
+      this.methods.isFinalized().call()
+    ]).then(info => {
+      return {
         model: hexToStr(info[0]),
         objective: hexToStr(info[1]),
-        result: info[2] === '0x' ? '' : hexToStr(info[2]),
+        result: !info[2] || info[2] === "0x" ? "" : hexToStr(info[2]),
 
         token: info[3],
         cost: Number(info[4]),
@@ -51,51 +55,67 @@ export default class Liability extends Contract {
 
         isSuccess: info[13],
         isFinalized: info[14]
-      })
-    );
+      };
+    });
   }
 
   lighthouse() {
-    return this.call.lighthouse().then(r => utils.toChecksumAddress(r));
+    return this.methods
+      .lighthouse()
+      .call()
+      .then(r => utils.toChecksumAddress(r));
   }
 
   result() {
-    return this.call.result().then(r => (r === '0x' ? '' : hexToStr(r)));
+    return this.methods
+      .result()
+      .call()
+      .then(r => (!r || r === "0x" ? "" : hexToStr(r)));
   }
 
   model() {
-    return this.call.model().then(r => hexToStr(r));
+    return this.methods
+      .model()
+      .call()
+      .then(r => hexToStr(r));
   }
 
   equalDemand(hash) {
-    return this.call.demandHash().then(r => {
-      if (hash === r) {
-        return true;
-      }
-      return false;
-    });
+    return this.methods
+      .demandHash()
+      .call()
+      .then(r => {
+        if (hash === r) {
+          return true;
+        }
+        return false;
+      });
   }
 
   equalOffer(hash) {
-    return this.call.offerHash().then(r => {
-      if (hash === r) {
-        return true;
-      }
-      return false;
-    });
+    return this.methods
+      .offerHash()
+      .call()
+      .then(r => {
+        if (hash === r) {
+          return true;
+        }
+        return false;
+      });
   }
 
   onResult() {
     return new Promise((resolve, reject) => {
-      this.once.Finalized((error /*, result*/) => {
+      this.once("Finalized", {}, (error, event) => {
         if (error) {
           reject(error);
           return;
         }
-        // resolve(
-        //   result.args.result === '0x' ? '' : hexToStr(result.args.result)
-        // );
-        this.result().then(r => resolve(r));
+        resolve(
+          !event.returnValues.result || event.returnValues.result === "0x"
+            ? ""
+            : hexToStr(event.returnValues.result)
+        );
       });
     });
   }

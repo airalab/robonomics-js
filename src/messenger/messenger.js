@@ -1,4 +1,3 @@
-import _has from "lodash/has";
 import Demand from "./message/demand";
 import Offer from "./message/offer";
 import Result from "./message/result";
@@ -74,6 +73,10 @@ export default class Messenger {
     const listener = msg => {
       const data = decodeMsg(msg);
       let type;
+      const hasOwnProperty = Object.prototype.hasOwnProperty;
+      function _has(object, key) {
+        return object != null && hasOwnProperty.call(object, key);
+      }
       if (_has(data, "validatorFee")) {
         type = Messenger.TYPE_DEMAND;
       } else if (_has(data, "lighthouseFee")) {

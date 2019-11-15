@@ -1,11 +1,11 @@
-import Base from './base';
-import { utils } from '../../web3Utils';
-import { base58 } from '../../utils';
+import utils from "web3-utils";
+import Base from "./base";
+import { base58 } from "../../utils";
 
 export default class Result extends Base {
   constructor(data) {
     super();
-    this._props = ['liability', 'result', 'success', 'signature'];
+    this._props = ["liability", "result", "success", "signature"];
     this.initProps({
       signature: data.signature || null,
       ...data
@@ -14,9 +14,9 @@ export default class Result extends Base {
 
   getHash() {
     return utils.soliditySha3(
-      { type: 'address', value: this.liability },
-      { type: 'bytes', value: utils.bytesToHex(base58.decode(this.result)) },
-      { type: 'bool', value: this.success }
+      { type: "address", value: this.liability },
+      { type: "bytes", value: utils.bytesToHex(base58.decode(this.result)) },
+      { type: "bool", value: this.success }
     );
   }
 }

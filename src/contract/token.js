@@ -1,6 +1,5 @@
-import Promise from 'bluebird';
-import Contract from './contract';
-import ABI from './abi/TokenEmission.json';
+import Contract from "./contract";
+import ABI from "./abi/TokenEmission.json";
 
 export default class Token extends Contract {
   constructor(web3, address) {
@@ -8,17 +7,18 @@ export default class Token extends Contract {
   }
 
   getInfo() {
-    return Promise.join(
-      this.call.name(),
-      this.call.totalSupply(),
-      this.call.decimals(),
-      this.call.symbol(),
-      (...info) => ({
+    return Promise.all([
+      this.methods.name().call(),
+      this.methods.totalSupply().call(),
+      this.methods.decimals().call(),
+      this.methods.symbol().call()
+    ]).then(info => {
+      return {
         name: info[0],
         totalSupply: Number(info[1]),
         decimals: Number(info[2]),
         symbol: info[3]
-      })
-    );
+      };
+    });
   }
 }

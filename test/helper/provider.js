@@ -1,23 +1,26 @@
-import * as web3Utils from '../../src/web3Utils';
-import { base58 } from '../../src/utils';
+import Web3 from "web3";
+import Factory from "../../src/contract/factory";
+import { base58 } from "../../src/utils";
+
+var abi = new Web3.modules.Eth().abi;
 
 function encodeDemand(msg) {
-  return web3Utils.abi.encodeParameters(
+  return abi.encodeParameters(
     [
-      'bytes',
-      'bytes',
-      'address',
-      'uint256',
-      'address',
-      'address',
-      'uint256',
-      'uint256',
-      'address',
-      'bytes'
+      "bytes",
+      "bytes",
+      "address",
+      "uint256",
+      "address",
+      "address",
+      "uint256",
+      "uint256",
+      "address",
+      "bytes"
     ],
     [
-      web3Utils.utils.bytesToHex(base58.decode(msg.model)),
-      web3Utils.utils.bytesToHex(base58.decode(msg.objective)),
+      Web3.utils.bytesToHex(base58.decode(msg.model)),
+      Web3.utils.bytesToHex(base58.decode(msg.objective)),
       msg.token,
       msg.cost,
       msg.lighthouse,
@@ -31,22 +34,22 @@ function encodeDemand(msg) {
 }
 
 function encodeOffer(msg) {
-  return web3Utils.abi.encodeParameters(
+  return abi.encodeParameters(
     [
-      'bytes',
-      'bytes',
-      'address',
-      'uint256',
-      'address',
-      'address',
-      'uint256',
-      'uint256',
-      'address',
-      'bytes'
+      "bytes",
+      "bytes",
+      "address",
+      "uint256",
+      "address",
+      "address",
+      "uint256",
+      "uint256",
+      "address",
+      "bytes"
     ],
     [
-      web3Utils.utils.bytesToHex(base58.decode(msg.model)),
-      web3Utils.utils.bytesToHex(base58.decode(msg.objective)),
+      Web3.utils.bytesToHex(base58.decode(msg.model)),
+      Web3.utils.bytesToHex(base58.decode(msg.objective)),
       msg.token,
       msg.cost,
       msg.validator,
@@ -85,23 +88,29 @@ const provider = {
   },
   match: () => {
     if (d !== null && o !== null) {
-      robonomics.lighthouse.send.createLiability(
-        encodeDemand(d),
-        encodeOffer(o),
-        { from: robonomics.account.address, gas: 6000000 }
+      // console.log(robonomics.lighthouse.address);
+      // console.log(encodeDemand(d), encodeOffer(o));
+      // console.log({ from: robonomics.account.address, gas: 6000000 });
+      const builder = new Factory(
+        robonomics.web3,
+        robonomics.lighthouse.address
       );
+      builder.methods
+        .createLiability(encodeDemand(d), encodeOffer(o))
+        .send({ from: robonomics.account.address, gas: 6000000 });
       d = null;
       o = null;
     }
   },
   finalization: msg => {
-    robonomics.lighthouse.send.finalizeLiability(
-      msg.liability,
-      web3Utils.utils.bytesToHex(base58.decode(msg.result)),
-      msg.success,
-      msg.signature,
-      { from: robonomics.account.address, gas: 6000000 }
-    );
+    robonomics.lighthouse.methods
+      .finalizeLiability(
+        msg.liability,
+        Web3.utils.bytesToHex(base58.decode(msg.result)),
+        msg.success,
+        msg.signature
+      )
+      .send({ from: robonomics.account.address, gas: 6000000 });
   }
 };
 export default provider;

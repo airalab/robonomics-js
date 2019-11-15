@@ -1,11 +1,13 @@
-import _has from "lodash/has";
-
 export default class Base {
   constructor() {
     this._props = [];
   }
 
   initProps(data) {
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
+    function _has(object, key) {
+      return object != null && hasOwnProperty.call(object, key);
+    }
     this._props.forEach(name => {
       if (!_has(data, name)) {
         throw new Error(`Not found property: ${name}`);

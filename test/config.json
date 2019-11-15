@@ -14,8 +14,13 @@
     }
   },
   "robonomics": {
-    "web3": "http://localhost:9545",
+    "web3": {
+      "provider": "ws://localhost:9545",
+      "options": {
+        "transactionConfirmationBlocks": 2
+      }
+    },
     "signPrefix": false,
-    "ens": "0x5577fE5AC51d179a6Db5C6b9f515a9723B041945"
+    "ens": "0x1A7A0EbD76F38D9C3E240CAdaD826cd9E2590C26"
   }
 }

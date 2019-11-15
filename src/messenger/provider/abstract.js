@@ -1,9 +1,9 @@
-import Channel from '../channel';
+import Channel from "../channel";
 
 export default class Abstract {
   constructor() {
     if (this.constructor === Abstract) {
-      throw new TypeError('Can not construct abstract class.');
+      throw new TypeError("Can not construct abstract class.");
     }
     this.channels = {};
   }
@@ -15,7 +15,7 @@ export default class Abstract {
   }
 
   ready() {
-    throw new TypeError('Do not call abstract method foo from child.');
+    throw new TypeError("Do not call abstract method foo from child.");
   }
 
   messageDecode(message) {
@@ -23,14 +23,14 @@ export default class Abstract {
   }
 
   send() {
-    throw new TypeError('Do not call abstract method foo from child.');
+    throw new TypeError("Do not call abstract method foo from child.");
   }
 
   on() {
-    throw new TypeError('Do not call abstract method foo from child.');
+    throw new TypeError("Do not call abstract method foo from child.");
   }
 
   off() {
-    throw new TypeError('Do not call abstract method foo from child.');
+    throw new TypeError("Do not call abstract method foo from child.");
   }
 }

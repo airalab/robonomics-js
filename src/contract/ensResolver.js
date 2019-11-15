@@ -1,7 +1,7 @@
-import namehash from 'eth-ens-namehash';
-import Contract from './contract';
-import { utils } from '../web3Utils';
-import ABI from './abi/EnsResolver.json';
+import namehash from "eth-ens-namehash";
+import utils from "web3-utils";
+import Contract from "./contract";
+import ABI from "./abi/EnsResolver.json";
 
 export default class EnsResolver extends Contract {
   constructor(web3, address) {
@@ -9,8 +9,9 @@ export default class EnsResolver extends Contract {
   }
 
   addr(name) {
-    return this.call
+    return this.methods
       .addr(namehash.hash(name))
+      .call()
       .then(r => utils.toChecksumAddress(r));
   }
 }

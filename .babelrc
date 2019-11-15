@@ -1,4 +1,14 @@
 {
-  "presets": ["@babel/preset-env"],
-  "plugins": [["inline-json"]]
+  "presets": [["@babel/preset-env", { "useBuiltIns": false, "debug": false }]],
+  "plugins": [["inline-json"]],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          { "useBuiltIns": "usage", "corejs": "3", "debug": false }
+        ]
+      ]
+    }
+  }
 }
