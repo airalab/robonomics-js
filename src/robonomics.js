@@ -1,14 +1,12 @@
-import Promise from 'bluebird';
-import _has from 'lodash/has';
-import Account from './account';
-import ENS from './contract/ens';
-import XRT from './contract/xrt';
-import Factory from './contract/factory';
-import Lighthouse from './contract/lighthouse';
-import Messenger from './messenger/messenger';
-import Demand from './messenger/message/demand';
-import Offer from './messenger/message/offer';
-import { utils } from './web3Utils';
+import utils from "web3-utils";
+import Account from "./account";
+import ENS from "./contract/ens";
+import XRT from "./contract/xrt";
+import Factory from "./contract/factory";
+import Lighthouse from "./contract/lighthouse";
+import Messenger from "./messenger/messenger";
+import Demand from "./messenger/message/demand";
+import Offer from "./messenger/message/offer";
 
 export default class Robonomics {
   constructor(config = {}) {
@@ -26,13 +24,9 @@ export default class Robonomics {
 
   init(config) {
     if (config.web3) {
-      if (_has(config.web3, 'version')) {
-        this.setWeb3(config.web3);
-      } else if (_has(config.web3, 'provider')) {
-        this.initWeb3(config.web3);
-      } else {
-        throw new Error('Bad config web3');
-      }
+      this.setWeb3(config.web3);
+    } else {
+      throw new Error("Bad config web3");
     }
     if (config.account) {
       this.initAccount(config.account);
@@ -58,19 +52,23 @@ export default class Robonomics {
     this.web3 = web3;
   }
 
-  initWeb3() {
-    throw new Error('Bad config web3');
-    // this.setWeb3(
-    //   new Web3(config.provider, config.net || {}, config.options || {})
-    // );
-  }
-
   setAccount(account) {
     this.account = account;
     if (this.web3.currentProvider.isMetaMask) {
-      this.account.setSigner(msg =>
-        Promise.promisify(this.web3.eth.sign)(this.account.address, msg)
-      );
+      this.account.setSigner(msg => {
+        return new Promise((resolve, reject) => {
+          this.web3.eth.sign(msg, this.account.address, function(
+            error,
+            result
+          ) {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve(result);
+          });
+        });
+      });
     }
   }
 
@@ -90,14 +88,14 @@ export default class Robonomics {
 
   initEns(config) {
     if (this.web3 === null) {
-      throw new Error('Require web3');
+      throw new Error("Require web3");
     }
     this.setEns(
       new ENS(
         this.web3,
-        config.address || '0x314159265dD8dbb310642f98f50C066173C1259b',
+        config.address || "0x314159265dD8dbb310642f98f50C066173C1259b",
         config.version || 5,
-        config.suffix || 'eth'
+        config.suffix || "eth"
       )
     );
   }
@@ -112,12 +110,12 @@ export default class Robonomics {
 
   async initXrt() {
     if (this.web3 === null) {
-      throw new Error('Require web3');
+      throw new Error("Require web3");
     }
     if (this.ens === null) {
-      throw new Error('Require ENS');
+      throw new Error("Require ENS");
     }
-    const xrt = new XRT(this.web3, await this.ens.addr('xrt'));
+    const xrt = new XRT(this.web3, await this.ens.addr("xrt"));
     this.setXrt(xrt);
     return xrt;
   }
@@ -128,12 +126,12 @@ export default class Robonomics {
 
   async initFactory() {
     if (this.web3 === null) {
-      throw new Error('Require web3');
+      throw new Error("Require web3");
     }
     if (this.ens === null) {
-      throw new Error('Require ENS');
+      throw new Error("Require ENS");
     }
-    const factory = new Factory(this.web3, await this.ens.addr('factory'));
+    const factory = new Factory(this.web3, await this.ens.addr("factory"));
     this.setFactory(factory);
     return factory;
   }
@@ -145,16 +143,16 @@ export default class Robonomics {
 
   async initLighthouse(name) {
     if (this.web3 === null) {
-      throw new Error('Require web3');
+      throw new Error("Require web3");
     }
     if (this.ens === null) {
-      throw new Error('Require ENS');
+      throw new Error("Require ENS");
     }
     let address = name;
     let ensName = name;
     if (utils.isAddress(name) === false) {
       address = await this.ens.addrLighthouse(name);
-      ensName = this.ens.getUrl(name, 'lighthouse');
+      ensName = this.ens.getUrl(name, "lighthouse");
     }
     const lighthouse = new Lighthouse(this.web3, address, ensName);
     this.setLighthouse(lighthouse);
@@ -167,14 +165,14 @@ export default class Robonomics {
 
   createChannel(lighthouse) {
     if (this.messageProvider === null) {
-      throw new Error('Require messageProvider');
+      throw new Error("Require messageProvider");
     }
     return this.messageProvider.createChannel(lighthouse.name);
   }
 
   createMessenger(channel) {
     if (this.account === null) {
-      throw new Error('Require account');
+      throw new Error("Require account");
     }
     return new Messenger(channel, this.account);
   }
@@ -195,7 +193,9 @@ export default class Robonomics {
       (message instanceof Demand || message instanceof Offer) &&
       message.nonce === 0
     ) {
-      message.nonce = Number(await this.factory.call.nonceOf(message.sender));
+      message.nonce = Number(
+        await this.factory.methods.nonceOf(message.sender).call()
+      );
     }
     return this.messenger.send(message);
   }
@@ -214,19 +214,21 @@ export default class Robonomics {
 
   liabilityByDemand(message) {
     return new Promise((resolve, reject) => {
-      const watcher = this.onLiability((e, liability) => {
+      const watcher = this.onLiability(function(e, liability) {
         if (e) {
+          watcher.unsubscribe();
           return reject(e);
         }
         liability
           .equalDemand(message.getHash())
-          .then(r => {
+          .then(function(r) {
             if (r) {
-              watcher.stopWatching();
+              watcher.unsubscribe();
               resolve(liability);
             }
           })
-          .catch(e => {
+          .catch(function(e) {
+            watcher.unsubscribe();
             reject(e);
           });
       });
@@ -234,7 +236,7 @@ export default class Robonomics {
   }
 
   onDemand(model, cb) {
-    return this.messenger.onDemand((err, message) => {
+    return this.messenger.onDemand(function(err, message) {
       if (err) {
         return;
       }
@@ -258,21 +260,21 @@ export default class Robonomics {
 
   liabilityByOffer(message) {
     return new Promise((resolve, reject) => {
-      const watcher = this.onLiability((e, liability) => {
+      const watcher = this.onLiability(function(e, liability) {
         if (e) {
-          watcher.stopWatching();
+          watcher.unsubscribe();
           return reject(e);
         }
         liability
           .equalOffer(message.getHash())
-          .then(r => {
+          .then(function(r) {
             if (r) {
-              watcher.stopWatching();
+              watcher.unsubscribe();
               resolve(liability);
             }
           })
-          .catch(e => {
-            watcher.stopWatching();
+          .catch(function(e) {
+            watcher.unsubscribe();
             reject(e);
           });
       });
@@ -280,7 +282,7 @@ export default class Robonomics {
   }
 
   onOffer(model, cb) {
-    return this.messenger.onOffer((err, message) => {
+    return this.messenger.onOffer(function(err, message) {
       if (err) {
         return;
       }
@@ -295,7 +297,7 @@ export default class Robonomics {
   }
 
   onResult(cb) {
-    return this.messenger.onResult((err, message) => {
+    return this.messenger.onResult(function(err, message) {
       if (err) {
         return;
       }
@@ -318,7 +320,7 @@ export default class Robonomics {
   }
 
   onFeedback(cb) {
-    return this.messenger.onFeedback((err, message) => {
+    return this.messenger.onFeedback(function(err, message) {
       if (err) {
         return;
       }
@@ -327,7 +329,7 @@ export default class Robonomics {
   }
 
   onPending(cb) {
-    return this.messenger.onPending((err, message) => {
+    return this.messenger.onPending(function(err, message) {
       if (err) {
         return;
       }

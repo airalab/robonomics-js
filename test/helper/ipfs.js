@@ -1,9 +1,9 @@
-import EventEmitter from 'events';
+import EventEmitter from "events";
 
 class PubSub extends EventEmitter {
   constructor() {
     super();
-    this.emit('ready', true);
+    this.emit("ready", true);
   }
   subscribe(topic, cb) {
     this.on(topic, cb);

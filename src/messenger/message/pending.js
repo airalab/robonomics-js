@@ -1,9 +1,9 @@
-import Base from './base';
+import Base from "./base";
 
 export default class Pending extends Base {
   constructor(data) {
     super();
-    this._props = ['tx'];
+    this._props = ["tx"];
     this.initProps(data);
   }
 }

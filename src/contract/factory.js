@@ -1,7 +1,7 @@
-import Contract from './contract';
-import Liability from './liability';
-import Lighthouse from './lighthouse';
-import ABI from './abi/Factory.json';
+import Contract from "./contract";
+import Liability from "./liability";
+import Lighthouse from "./lighthouse";
+import ABI from "./abi/Factory.json";
 
 export default class Factory extends Contract {
   constructor(web3, address) {
@@ -9,7 +9,7 @@ export default class Factory extends Contract {
   }
 
   onLiability(cb) {
-    return this.event.NewLiability((error, result) => {
+    return this.events.NewLiability({}, (error, result) => {
       if (error) {
         cb(error);
         return;
@@ -21,7 +21,7 @@ export default class Factory extends Contract {
         }
         const liability = new Liability(
           this.web3,
-          result.args.liability,
+          result.returnValues.liability,
           r.from
         );
         cb(null, liability);
@@ -30,15 +30,15 @@ export default class Factory extends Contract {
   }
 
   onLighthouse(cb) {
-    return this.event.NewLighthouse((error, result) => {
+    return this.events.NewLighthouse({}, (error, result) => {
       if (error) {
         cb(error);
         return;
       }
       const lighthouse = new Lighthouse(
         this.web3,
-        result.args.lighthouse,
-        result.args.name
+        result.returnValues.lighthouse,
+        result.returnValues.name
       );
       cb(null, lighthouse);
     });
