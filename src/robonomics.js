@@ -77,7 +77,7 @@ export default class Robonomics {
       new Account(
         config.address || null,
         config.privateKey || null,
-        config.isSignPrefix || true
+        config.isSignPrefix === undefined ? true : Boolean(config.isSignPrefix)
       )
     );
   }
