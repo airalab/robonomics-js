@@ -23,7 +23,7 @@
 
 ### Зависимости
 
-- [Web3.js](https://github.com/ethereum/web3.js/) version 0.20.7
+- [Web3.js](https://github.com/ethereum/web3.js/) version 1.2.4
 - [Ipfs](https://github.com/ipfs/js-ipfs) version 0.34.0
 
 ## Использование
@@ -52,7 +52,11 @@ const options = {
 
 // infura
 const options = {
-  web3: new Web3.providers.HttpProvider("https://mainnet.infura.io/"),
+  web3: new Web3(
+    new Web3.providers.WebsocketProvider(
+      "wss://mainnet.infura.io/ws/v3/0b2f2a5026264b57b6d698b480332e89"
+    )
+  ),
   ...
 };
 ```
@@ -171,15 +175,15 @@ robonomics.ready().then(() => {
 ```js
 const demand = {
   // ОБЯЗАТЕЛЬНЫЕ параметры
-  model: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M', // модель в виде ipfs хеша на rosbag файл
-  objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M', // задача в виде ipfs хеша на rosbag файл
+  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // модель в виде ipfs хеша на rosbag файл
+  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // задача в виде ipfs хеша на rosbag файл
   token: robonomics.xrt.address, // адрес токена для оплата
   cost: 1, // стоимость
   deadline: 9999999, // номер блока после которого спрос будет не действителен
 
   // НЕ ОБЯЗАТЕЛЬНЫЕ параметры
-  lighthouse: '0x0000000000000000000000000000000000000000', // адрес маяка, по умолчанию указан адрес маяка при инициализации
-  validator: '0x0000000000000000000000000000000000000000', // адрес валидатора, если требуется проверка результата
+  lighthouse: "0x0000000000000000000000000000000000000000", // адрес маяка, по умолчанию указан адрес маяка при инициализации
+  validator: "0x0000000000000000000000000000000000000000", // адрес валидатора, если требуется проверка результата
   validatorFee: 0, // комиссия валидатора
   nonce: 1 // порядковый номер
 };
@@ -213,16 +217,16 @@ robonomics.onDemand(model, message => {
 ```js
 const offer = {
   // ОБЯЗАТЕЛЬНЫЕ параметры
-  model: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M', // модель в виде ipfs хеша на rosbag файл
-  objective: 'QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M', // задача в виде ipfs хеша на rosbag файл
+  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // модель в виде ipfs хеша на rosbag файл
+  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // задача в виде ipfs хеша на rosbag файл
   token: robonomics.xrt.address, // адрес токена для оплата
   cost: 1, // стоимость
   deadline: 9999999, // номер блока после которого спрос будет не действителен
 
   // НЕ ОБЯЗАТЕЛЬНЫЕ параметры
-  lighthouse: '0x0000000000000000000000000000000000000000', // адрес маяка, по умолчанию указан адрес маяка при инициализации
+  lighthouse: "0x0000000000000000000000000000000000000000", // адрес маяка, по умолчанию указан адрес маяка при инициализации
   lighthouseFee: 0, // комиссия маяка
-  validator: '0x0000000000000000000000000000000000000000', // адрес валидатора, если требуется проверка результата
+  validator: "0x0000000000000000000000000000000000000000", // адрес валидатора, если требуется проверка результата
   nonce: 1 // порядковый номер
 };
 ```
@@ -255,9 +259,9 @@ robonomics.onOffer(model, message => {
 ```js
 const result = {
   // ОБЯЗАТЕЛЬНЫЕ параметры
-  liability: '0x0000000000000000000000000000000000000000', // адрес контракта обязательства
+  liability: "0x0000000000000000000000000000000000000000", // адрес контракта обязательства
   success: true, // признак результата работы
-  result: 'QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg' // результат в виде ipfs хеша на rosbag файл
+  result: "QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg" // результат в виде ipfs хеша на rosbag файл
 };
 ```
 
@@ -267,7 +271,7 @@ const result = {
 
 ```js
 robonomics.sendResult(result).then(() => {
-  console.log('ok');
+  console.log("ok");
 });
 ```
 
@@ -361,7 +365,7 @@ robonomics.lighthouse.getProviders().then(list => {
 const minimalFreeze = 1000 // Wn
 const timeout = 25 // blocks
 const name = 'mylighthouse' // название маяка
-robonomics.factory.send.createLighthouse(minimalFreeze, timeout, name, { from: robonomics.account.address })
+robonomics.factory.methods.createLighthouse(minimalFreeze, timeout, name).send({ from: robonomics.account.address })
     .then((tx) => console.log(tx))
 ​
 robonomics.factory.onLighthouse((lighthouse) => {
@@ -374,10 +378,11 @@ robonomics.factory.onLighthouse((lighthouse) => {
 Предварительно необходимо выполнить `approve` токенов `XRT`
 
 ```js
-const name = 'mylighthouse'; // название маяка
+const name = "mylighthouse"; // название маяка
 const stake = 1000; // Wn
-robonomics.lighthouse.send
-  .refill(stake, { from: robonomics.account.address })
+robonomics.lighthouse.methods
+  .refill(stake)
+  .send({ from: robonomics.account.address })
   .then(tx => console.log(tx));
 ```
 
@@ -404,24 +409,27 @@ robonomics.xrt.getInfo().then(data => {
 ##### Проверить баланс
 
 ```js
-robonomics.xrt.call
+robonomics.xrt.methods
   .balanceOf(robonomics.account.address)
+  .call()
   .then(balance => console.log(balance));
 ```
 
 ##### Проверить кол-во одобренных токенов на адрес фабрики
 
 ```js
-robonomics.xrt.call
+robonomics.xrt.methods
   .allowance(robonomics.account.address, robonomics.factory.address)
+  .call()
   .then(allowance => console.log(allowance));
 ```
 
 ##### Approve токенов на адрес маяка
 
 ```js
-robonomics.xrt.send
-  .approve(robonomics.lighthouse.address, 100, {
+robonomics.xrt.methods
+  .approve(robonomics.lighthouse.address, 100)
+  .send({
     from: robonomics.account.address
   })
   .then(tx => console.log(tx));
@@ -432,4 +440,4 @@ robonomics.xrt.send
 - [Сайт](https://robonomics.network/)
 - [Документация](https://aira.readthedocs.io/)
 - [Минимальный шаблон dApp](https://github.com/airalab/vue-dapp-robonomics-template)
-- [Пример dApp](https://codesandbox.io/embed/robonomics-vue-template-bgipo)
+- [Пример dApp](https://codesandbox.io/s/robonomics-vue-template-ewuiw)
