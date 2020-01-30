@@ -1,50 +1,7 @@
 import Account from "../src/account";
 import config from "./config.json";
-// import Promise from "bluebird";
 
 const account = new Account(null, config.accounts.demand.privateKey, false);
-
-// console.log(Promise);
-// console.log(Promise.all);
-// console.log(Promise.join);
-// console.log(Promise.resolve);
-// console.log(Promise.reject);
-// console.log(Promise.promisify);
-
-// const promiseA = new Promise(resolve => {
-//   setTimeout(() => {
-//     resolve("promiseA");
-//   }, 3000);
-// });
-// const promiseB = new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     resolve("promiseB");
-//   }, 4000);
-// });
-// console.time();
-// Promise.join(promiseA, promiseB, function(...r) {
-//   console.log("r", r);
-//   return r;
-// })
-//   .then(r => {
-//     console.log("g", r);
-//     console.timeEnd();
-//   })
-//   .catch(e => {
-//     console.log("err", e);
-//   });
-// Promise.all([promiseA, promiseB])
-//   .then(r => {
-//     console.log("r", r);
-//     return r;
-//   })
-//   .then(r => {
-//     console.log("g", r);
-//     console.timeEnd();
-//   })
-//   .catch(e => {
-//     console.log("err", e);
-//   });
 
 describe("Account", () => {
   test("address by privateKey", () => {
