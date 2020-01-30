@@ -18,8 +18,7 @@ jest.setTimeout(20000);
 const robonomicsProvider = new Robonomics({
   web3,
   account: {
-    privateKey: config.accounts.provider.privateKey,
-    isSignPrefix: false
+    privateKey: config.accounts.provider.privateKey
   },
   ens: { address: config.robonomics.ens },
   messageProvider: new MessageProviderIpfs(ipfs)
@@ -28,8 +27,7 @@ const robonomicsProvider = new Robonomics({
 const robonomicsOffer = new Robonomics({
   web3,
   account: {
-    privateKey: config.accounts.offer.privateKey,
-    isSignPrefix: false
+    privateKey: config.accounts.offer.privateKey
   },
   ens: { address: config.robonomics.ens },
   messageProvider: new MessageProviderIpfs(ipfs)
@@ -38,8 +36,7 @@ const robonomicsOffer = new Robonomics({
 const robonomicsDemand = new Robonomics({
   web3,
   account: {
-    privateKey: config.accounts.demand.privateKey,
-    isSignPrefix: false
+    privateKey: config.accounts.demand.privateKey
   },
   ens: { address: config.robonomics.ens },
   messageProvider: new MessageProviderIpfs(ipfs)
