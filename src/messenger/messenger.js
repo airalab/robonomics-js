@@ -35,7 +35,7 @@ export default class Messenger {
     return "pending";
   }
 
-  constructor(channel, account) {
+  constructor(channel, account = null) {
     this.channel = channel;
     this.account = account;
   }
@@ -56,6 +56,9 @@ export default class Messenger {
   }
 
   async send(message) {
+    if (this.account === null) {
+      throw new Error("Require account");
+    }
     if (
       !(message instanceof Demand) &&
       !(message instanceof Offer) &&

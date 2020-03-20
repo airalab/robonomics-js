@@ -49,13 +49,21 @@ export default class Account {
     return this._signer(message);
   }
 
-  recovery(hash, signature) {
-    const message = this.isSignPrefix ? setPrefix(hash) : hash;
+  static recovery(hash, signature, isSignPrefix = true) {
+    const message = isSignPrefix ? setPrefix(hash) : hash;
     return account.recover(message, signature);
+  }
+
+  recovery(hash, signature) {
+    return Account.recovery(hash, signature, this.isSignPrefix);
   }
 
   signMessage(message) {
     return this.sign(message.getHash());
+  }
+
+  static recoveryMessage(message, isSignPrefix = true) {
+    return Account.recovery(message.getHash(), message.signature, isSignPrefix);
   }
 
   recoveryMessage(message) {

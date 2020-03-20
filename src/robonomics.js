@@ -31,11 +31,9 @@ export default class Robonomics {
     if (config.account) {
       this.initAccount(config.account);
     }
-    if (config.ens) {
-      this.initEns(config.ens);
-      this.load.push(this.initXrt());
-      this.load.push(this.initFactory());
-    }
+    this.initEns(config.ens);
+    this.load.push(this.initXrt());
+    this.load.push(this.initFactory());
     if (config.messageProvider) {
       this.setMessageProvider(config.messageProvider);
     }
@@ -86,7 +84,7 @@ export default class Robonomics {
     this.ens = ens;
   }
 
-  initEns(config) {
+  initEns(config = {}) {
     if (this.web3 === null) {
       throw new Error("Require web3");
     }
@@ -171,9 +169,6 @@ export default class Robonomics {
   }
 
   createMessenger(channel) {
-    if (this.account === null) {
-      throw new Error("Require account");
-    }
     return new Messenger(channel, this.account);
   }
 
@@ -185,6 +180,9 @@ export default class Robonomics {
   }
 
   async send(type, data) {
+    if (this.account === null) {
+      throw new Error("Require account");
+    }
     const message = Messenger.create(type, {
       sender: this.account.address,
       ...data

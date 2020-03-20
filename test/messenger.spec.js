@@ -10,6 +10,7 @@ const account = new Account(null, config.accounts.demand.privateKey, false);
 const provider = new MessageProvider(ipfs);
 const channel = provider.createChannel("lighthouse.name");
 const messenger = new Messenger(channel, account);
+const messengerNotAccount = new Messenger(channel);
 
 describe("Messenger", () => {
   test("create message valid", () => {
@@ -53,13 +54,44 @@ describe("Messenger", () => {
       deadline: 2,
       sender: account.address
     });
-    messenger.on((err, msg) => {
+    const listener = messenger.on((err, msg) => {
       expect(msg).toBeInstanceOf(Demand);
+      messenger.off(listener);
       done();
     });
     messenger.send(demand);
   });
   test("send bad message", () => {
     expect(messenger.send("test")).rejects.toThrow();
+  });
+  test("send without account", () => {
+    const demand = Messenger.create(Messenger.TYPE_DEMAND, {
+      model: "QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjdW",
+      objective: "Qmbm3o2wkqseSEi5F69CPAuDrsKnrwTJ3HN5FVLPgLHKUm",
+      token: account.address,
+      cost: 78923,
+      lighthouse: account.address,
+      deadline: 1,
+      sender: account.address
+    });
+    expect(messengerNotAccount.send(demand)).rejects.toThrow();
+  });
+  test("on without account", done => {
+    expect.assertions(1);
+    const demand = Messenger.create(Messenger.TYPE_DEMAND, {
+      model: "QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjdW",
+      objective: "Qmbm3o2wkqseSEi5F69CPAuDrsKnrwTJ3HN5FVLPgLHKUm",
+      token: account.address,
+      cost: 78923,
+      lighthouse: account.address,
+      deadline: 2,
+      sender: account.address
+    });
+    const listener = messengerNotAccount.on((err, msg) => {
+      expect(msg).toBeInstanceOf(Demand);
+      messengerNotAccount.off(listener);
+      done();
+    });
+    messenger.send(demand);
   });
 });

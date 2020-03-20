@@ -8,5 +8,6 @@ export { default as Factory } from "./contract/factory";
 export { default as Liability } from "./contract/liability";
 export { default as Lighthouse } from "./contract/lighthouse";
 export { default as Token } from "./contract/token";
+export { default as Account } from "./account";
 import * as utils from "./utils";
 export { utils };

@@ -441,3 +441,5 @@ robonomics.xrt.methods
 - [Документация](https://aira.readthedocs.io/)
 - [Минимальный шаблон dApp](https://github.com/airalab/vue-dapp-robonomics-template)
 - [Пример dApp](https://codesandbox.io/s/robonomics-vue-template-ewuiw)
+
+[![Edit Robonomics Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/robonomics-vue-template-ewuiw?fontsize=14&hidenavigation=1&theme=dark)
