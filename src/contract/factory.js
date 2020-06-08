@@ -3,6 +3,21 @@ import Liability from "./liability";
 import Lighthouse from "./lighthouse";
 import ABI from "./abi/Factory.json";
 
+function watchTx(web3, tx, cb) {
+  const interval = setInterval(() => {
+    web3.eth.getTransactionReceipt(tx, function (e, r) {
+      if (e) {
+        clearInterval(interval);
+        cb(e);
+        return;
+      } else if (r) {
+        clearInterval(interval);
+        cb(null, r);
+      }
+    });
+  }, 500);
+}
+
 export default class Factory extends Contract {
   constructor(web3, address) {
     super(web3, ABI, address);
@@ -14,7 +29,7 @@ export default class Factory extends Contract {
         cb(error);
         return;
       }
-      this.web3.eth.getTransaction(result.transactionHash, (e, r) => {
+      watchTx(this.web3, result.transactionHash, (e, r) => {
         if (e) {
           cb(e);
           return;
@@ -35,12 +50,18 @@ export default class Factory extends Contract {
         cb(error);
         return;
       }
-      const lighthouse = new Lighthouse(
-        this.web3,
-        result.returnValues.lighthouse,
-        result.returnValues.name
-      );
-      cb(null, lighthouse);
+      watchTx(this.web3, result.transactionHash, (e) => {
+        if (e) {
+          cb(e);
+          return;
+        }
+        const lighthouse = new Lighthouse(
+          this.web3,
+          result.returnValues.lighthouse,
+          result.returnValues.name
+        );
+        cb(null, lighthouse);
+      });
     });
   }
 }
