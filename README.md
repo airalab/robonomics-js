@@ -5,30 +5,30 @@
 [![NPM Version](https://img.shields.io/npm/v/robonomics-js.svg?style=flat)](https://www.npmjs.com/package/robonomics-js)
 [![Build Status](https://travis-ci.org/airalab/robonomics-js.svg?branch=master)](https://travis-ci.org/airalab/robonomics-js)
 
-Простая Javascript библиотека для работы с данными сети Robonomics
+Simple Javascript library to work with Robonomcis on Ethereum data
 
-## Установка
+## Install
 
-Установка выполняется с помощью [npm](https://www.npmjs.com/). Чтобы установить, запустите:
+Installation is performed via [npm](https://www.npmjs.com/). To install, run:
 
 ```bash
 > npm install robonomics-js --save
 ```
 
-Или с помощью [yarn](https://yarnpkg.com/). Чтобы установить, запустите:
+Or with [yarn](https://yarnpkg.com/). To install, run:
 
 ```bash
 > yarn add robonomics-js
 ```
 
-### Зависимости
+### Dependencies
 
 - [Web3.js](https://github.com/ethereum/web3.js/) version 1.2.4
 - [Ipfs](https://github.com/ipfs/js-ipfs) version 0.34.0
 
-## Использование
+## Use
 
-Создает и возвращает экземпляр Robonomics.
+Create and return an instance of Robonomics.
 
 ```js
 const options = {...};
@@ -37,11 +37,11 @@ const robonomics = new Robonomics(options);
 
 ### `options`
 
-Это объект свойств:
+This is a properties object:
 
 `options.web3`
 
-Это экземпляр [web3.js](https://github.com/ethereum/web3.js/)
+That's an instance of [web3.js](https://github.com/ethereum/web3.js/)
 
 ```js
 // metamask
@@ -63,7 +63,7 @@ const options = {
 
 `options.messageProvider`
 
-Это экземпляр MessageProviderIpfs, который использует узел [js-ipfs](https://github.com/ipfs/js-ipfs) с включеной опцией pubsub.
+That's an instance of MessageProviderIpfs, which uses the node of [js-ipfs](https://github.com/ipfs/js-ipfs) with `pubsub` option enabled.
 
 ```js
 const ipfs = new Ipfs({
@@ -108,10 +108,10 @@ const options = {
 
 `options.account`
 
-Это объект свойств аккаунта, которым будут подписываться сообщения.
-Необходимо указать либо адрес аккаунта (предварительно аккаунт должен быть разблокирован), либо приватный ключь (адрес будет востановлен из ключа).
+This is an object of account's properties, the account to sing messages with.
+Pass either an account's address (it should be unlocked in prior), or teh account's private key (account's address will be derived out of the key).
 
-Параметр `isSignPrefix` опрелеляет довавлять префикс или нет для подписи сообщения. По умолчанию `true`.
+`isSignPrefix` is responsible for adding a prefix to the message. Defaults to `true`.
 
 ```js
 const options = {
@@ -126,10 +126,10 @@ const options = {
 
 `options.ens`
 
-Это объект свойств контракта ens. Этот параметр не обязателен.
-При необходимости можно указать адрес `address` контракта если используется не mainnet.
-Суффикс `suffix` для имен, для `sidechain` этот суффикс `sid`, по умолчанию `eth`.
-Версия `version` сети робономики, по умолчанию актуальная последняя версия.
+This is a properties object of the ens contract. The parameter is optional.
+If necessary, set `address` of the contract (if using other than mainnet network).
+Suffix `suffix` for names, defaults to `eth`, for any `sidechain` it's `sid`.
+Version `version` of Robonomics network, defaults to the latest one.
 
 ```js
 const options = {
@@ -144,8 +144,8 @@ const options = {
 
 `options.lighthouse`
 
-ENS имя маяка, параметр не обязательный, по умолчанию указан `airalab.lighthouse.5.robonomics.eth`.
-Полное имя указывать не обязательно, можно указать только название, например `airalab`.
+ENS lighthouse name, optional, defaults to `airalab.lighthouse.5.robonomics.eth`.
+It's possible to set the short name only: `airalab`.
 
 ```js
 const options = {
@@ -154,7 +154,7 @@ const options = {
 };
 ```
 
-Перед использованием необходимо дождаться инициальзации всех компонентов.
+Wait for components initialization before use.
 
 ```js
 const options = {...};
@@ -166,32 +166,32 @@ robonomics.ready().then(() => {
 
 ## API
 
-### Сообщения
+### Messages
 
-#### Спрос
+#### Demand
 
-Фотмат сообщения.
+Message format.
 
 ```js
 const demand = {
-  // ОБЯЗАТЕЛЬНЫЕ параметры
-  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // модель в виде ipfs хеша на rosbag файл
-  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // задача в виде ipfs хеша на rosbag файл
-  token: robonomics.xrt.address, // адрес токена для оплата
-  cost: 1, // стоимость
-  deadline: 9999999, // номер блока после которого спрос будет не действителен
+  // Required
+  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // model as an IPFS CID to a rosbag file
+  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // task as an IPFS CID to a rosbag file
+  token: robonomics.xrt.address, // payment token address
+  cost: 1, // cost
+  deadline: 9999999, // deadline block number
 
-  // НЕ ОБЯЗАТЕЛЬНЫЕ параметры
-  lighthouse: "0x0000000000000000000000000000000000000000", // адрес маяка, по умолчанию указан адрес маяка при инициализации
-  validator: "0x0000000000000000000000000000000000000000", // адрес валидатора, если требуется проверка результата
-  validatorFee: 0, // комиссия валидатора
-  nonce: 1 // порядковый номер
+  // Optional
+  lighthouse: "0x0000000000000000000000000000000000000000", // lighthouse address, defaults to the one set at initialization
+  validator: "0x0000000000000000000000000000000000000000", // validator address in case proof of work needed
+  validatorFee: 0, // validator fee
+  nonce: 1 // nonce
 };
 ```
 
 `robonomics.sendDemand`
 
-Подпись и отправка сообщения спроса. В качестве результата получаем обязательство.
+Sign and send the demand. Returns liability.
 
 ```js
 robonomics.sendDemand(demand).then(liability => {
@@ -201,8 +201,7 @@ robonomics.sendDemand(demand).then(liability => {
 
 `robonomics.onDemand`
 
-Слушает сообщения с спросом по указаной модели в качестве первого параметра.
-Если первым параметром указать `null`, то будут получены все сообщения спроса на маяке.
+Listens to demand messages for a passed model. If set model to `null`, listens to all the demands on a lighthouse.
 
 ```js
 robonomics.onDemand(model, message => {
@@ -210,30 +209,30 @@ robonomics.onDemand(model, message => {
 });
 ```
 
-#### Предложение
+#### Offer
 
-Фотмат сообщения.
+Message format.
 
 ```js
 const offer = {
-  // ОБЯЗАТЕЛЬНЫЕ параметры
-  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // модель в виде ipfs хеша на rosbag файл
-  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // задача в виде ipfs хеша на rosbag файл
-  token: robonomics.xrt.address, // адрес токена для оплата
-  cost: 1, // стоимость
-  deadline: 9999999, // номер блока после которого спрос будет не действителен
+  // Required
+  model: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf1M", // model as an IPFS CID to a rosbag file
+  objective: "QmSt69qQqGka1qwRRHbdmAWk4nCbsV1mqJwd8cWbEyhf2M", // task as an IPFS CID to a rosbag file
+  token: robonomics.xrt.address, // payment token address
+  cost: 1, // cost
+  deadline: 9999999, // deadline block number
 
-  // НЕ ОБЯЗАТЕЛЬНЫЕ параметры
-  lighthouse: "0x0000000000000000000000000000000000000000", // адрес маяка, по умолчанию указан адрес маяка при инициализации
-  lighthouseFee: 0, // комиссия маяка
-  validator: "0x0000000000000000000000000000000000000000", // адрес валидатора, если требуется проверка результата
-  nonce: 1 // порядковый номер
+  // Optional
+  lighthouse: "0x0000000000000000000000000000000000000000", // lighthouse address, defaults to the one set at initialization
+  lighthouseFee: 0, // lighthouse fee
+  validator: "0x0000000000000000000000000000000000000000", // validator address in case proof of work needed
+  nonce: 1 // nonce
 };
 ```
 
 `robonomics.sendOffer`
 
-Подпись и отправка сообщения предложения. В качестве результата получаем обязательство.
+Sign and send the offer. Returns liability.
 
 ```js
 robonomics.sendOffer(offer).then(liability => {
@@ -243,8 +242,7 @@ robonomics.sendOffer(offer).then(liability => {
 
 `robonomics.onOffer`
 
-Слушает сообщения с предложениями по указаной модели в качестве первого параметра.
-Если первым параметром указать `null`, то будут получены все сообщения предложений на маяке.
+Listens to offer messages for a passed model. If set model to `null`, listens to all the offers on a lighthouse.
 
 ```js
 robonomics.onOffer(model, message => {
@@ -252,22 +250,22 @@ robonomics.onOffer(model, message => {
 });
 ```
 
-#### Результат
+#### Result
 
-Фотмат сообщения.
+Message format.
 
 ```js
 const result = {
-  // ОБЯЗАТЕЛЬНЫЕ параметры
-  liability: "0x0000000000000000000000000000000000000000", // адрес контракта обязательства
-  success: true, // признак результата работы
-  result: "QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg" // результат в виде ipfs хеша на rosbag файл
+  // Required
+  liability: "0x0000000000000000000000000000000000000000", // liability contract address
+  success: true, // job success flag
+  result: "QmWXk8D1Fh5XFJvBodcWbwgyw9htjc6FJg8qi1YYEoPnrg" // Result as an IPFS CID to a rosbag file
 };
 ```
 
 `robonomics.sendResult`
 
-Подпись и отправка сообщения предложения.
+Sign and send offer message.
 
 ```js
 robonomics.sendResult(result).then(() => {
@@ -277,7 +275,7 @@ robonomics.sendResult(result).then(() => {
 
 `robonomics.onResult`
 
-Слушает сообщения с результатами в сети. Результат в этих сообщениях нельзя считать валидным. Валидный результат нужно получать из контракта обязательства
+Listens to result messages in the network. Result is not supposed as valid. Valid result is to be obtained from the liability.
 
 ```js
 robonomics.onResult(result => {
@@ -285,13 +283,13 @@ robonomics.onResult(result => {
 });
 ```
 
-### Контракты
+### Contracts
 
-#### Обязательство
+#### Liability
 
 `liability.getInfo`
 
-Вернет объект всех свойств контракта.
+Returns an object of contract properties.
 
 ```js
 liability.getInfo().then(data => {
@@ -320,7 +318,7 @@ liability.getInfo().then(data => {
 
 `liability.onResult`
 
-Ожидает закрытия контрата, вернет результат.
+Waits for the contract to complete, returns result.
 
 ```js
 liability.onResult().then(result => {
@@ -328,11 +326,11 @@ liability.onResult().then(result => {
 });
 ```
 
-#### Маяк
+#### Lighthouse
 
 `robonomics.lighthouse.getInfo`
 
-Вернет объект всех свойств контракта.
+Returns an object of contract properties.
 
 ```js
 robonomics.lighthouse.getInfo().then(data => {
@@ -351,7 +349,7 @@ robonomics.lighthouse.getInfo().then(data => {
 
 `robonomics.lighthouse.getProviders`
 
-Вернет список адресов провайдеров работающих на маяке.
+Returns a list of provides working on a lighthouse.
 
 ```js
 robonomics.lighthouse.getProviders().then(list => {
@@ -359,12 +357,12 @@ robonomics.lighthouse.getProviders().then(list => {
 });
 ```
 
-##### Создание нового маяка
+##### Create a new lighthouse
 
 ```js
 const minimalFreeze = 1000 // Wn
 const timeout = 25 // blocks
-const name = 'mylighthouse' // название маяка
+const name = 'mylighthouse' // lighthouse name
 robonomics.factory.methods.createLighthouse(minimalFreeze, timeout, name).send({ from: robonomics.account.address })
     .then((tx) => console.log(tx))
 ​
@@ -373,12 +371,12 @@ robonomics.factory.onLighthouse((lighthouse) => {
 })
 ```
 
-##### Стать провайдером маяка
+##### Become a lighthouse provider
 
-Предварительно необходимо выполнить `approve` токенов `XRT`
+First, XRT tokens approve needed:
 
 ```js
-const name = "mylighthouse"; // название маяка
+const name = "mylighthouse"; // lighthouse name
 const stake = 1000; // Wn
 robonomics.lighthouse.methods
   .refill(stake)
@@ -386,11 +384,11 @@ robonomics.lighthouse.methods
   .then(tx => console.log(tx));
 ```
 
-#### Токен
+#### Token
 
 `robonomics.xrt.getInfo`
 
-Вернет объект всех свойств контракта.
+Returns an object of contract properties.
 
 ```js
 robonomics.xrt.getInfo().then(data => {
@@ -406,7 +404,7 @@ robonomics.xrt.getInfo().then(data => {
 });
 ```
 
-##### Проверить баланс
+##### Check balance
 
 ```js
 robonomics.xrt.methods
@@ -415,7 +413,7 @@ robonomics.xrt.methods
   .then(balance => console.log(balance));
 ```
 
-##### Проверить кол-во одобренных токенов на адрес фабрики
+##### Check number of approved tokens for the factory by its address
 
 ```js
 robonomics.xrt.methods
@@ -424,7 +422,7 @@ robonomics.xrt.methods
   .then(allowance => console.log(allowance));
 ```
 
-##### Approve токенов на адрес маяка
+##### Approve tokens for the lighthouse address
 
 ```js
 robonomics.xrt.methods
@@ -435,11 +433,11 @@ robonomics.xrt.methods
   .then(tx => console.log(tx));
 ```
 
-## Ссылки
+## Links
 
-- [Сайт](https://robonomics.network/)
-- [Документация](https://aira.readthedocs.io/)
-- [Минимальный шаблон dApp](https://github.com/airalab/vue-dapp-robonomics-template)
-- [Пример dApp](https://codesandbox.io/s/robonomics-vue-template-ewuiw)
+- [Robonomics Network](https://robonomics.network/)
+- [Docs](https://aira.readthedocs.io/)
+- [Basic DApp template](https://github.com/airalab/vue-dapp-robonomics-template)
+- [DApp example](https://codesandbox.io/s/robonomics-vue-template-ewuiw)
 
 [![Edit Robonomics Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/robonomics-vue-template-ewuiw?fontsize=14&hidenavigation=1&theme=dark)
